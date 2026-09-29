@@ -1,0 +1,23 @@
+JoyMetric v31.1.1 — Agentic LET'S GO + Spotify Route Recovery
+
+TESTS
+=====
+PASS  Python compile: app.py, realtime_native_engine.py, agentic_live_dj.py
+PASS  JavaScript syntax: static/app.js (node --check)
+PASS  LET'S GO UI present; old ENGAGE AGENT start button removed
+PASS  Agentic control/transport endpoints gated until LET'S GO is live
+PASS  Double-click start lock present
+PASS  Start failure catches BaseException, stops engine/agent and logs runtime/agentic_start_error.log
+PASS  Spotify discovery retries PyCAW then falls back to live Spotify.exe process
+PASS  SVCL render ID discovery uses documented /scomma <tempfile> export rather than empty filename
+PASS  Route targets durable Spotify.exe plus current Spotify PIDs
+PASS  Mock routing: /SetAppDefault zero-exit with EMPTY /Stdout still enables route
+PASS  feature_params AST parity vs v31.1.0
+PASS  RealtimeDSP AST parity vs v31.1.0
+PASS  MasterSafetyCompressor AST parity vs v31.1.0
+PASS  SourceFidelityGuard AST parity vs v31.1.0
+
+RUNTIME NOTE
+============
+Windows Spotify/SVCL/WASAPI route cannot be executed in this Linux packaging environment.
+The first Windows run remains the live integration validation. If LET'S GO fails, the app must stay open/stopped and write the backend traceback to runtime/agentic_start_error.log.

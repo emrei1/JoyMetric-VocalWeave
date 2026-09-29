@@ -1,0 +1,36 @@
+JoyMetric v31.8.9 — Qualified A/B Shift Cadence Validation
+Date: 2026-09-01
+
+STATIC
+PASS — Python compile: app.py, agentic_live_dj.py, dj_director_v3.py, realtime_native_engine.py, realtime_semantic_server.py, device_scan_worker.py
+PASS — JavaScript syntax: static/app.js
+
+CREATIVITY / SHIFT CADENCE
+PASS — normal creativity Deck-B shift multiplier = 1.0x
+PASS — creativity 0.70 Deck-B shift multiplier ~= 2.08x
+PASS — creativity 1.00 Deck-B shift multiplier = 3.5x
+PASS — max-authority structural-boundary plan produced 4 DECKB_MICRO_SHIFT + 4 DECKB_RETURN events
+PASS — one primary gesture per beat remains enforced
+PASS — micro shifts reuse the resident qualified loop; no repeated capture is required for each pulse
+
+FIXED MUSICAL QUALITY GATE
+PASS — gate is independent of creativity / agentic authority
+PASS — intentionally poor example (harm=.31 / rhythm=.43 / salience=.12 / tonal future=.70) => quality gate = 0.0
+PASS — good percussive match (harm=.72 / rhythm=.91 / salience=.62) => quality gate = 1.0
+PASS — good harmonic match (harm=.88 / rhythm=.62 / salience=.55) => quality gate = 1.0
+PASS — crossfader and Deck-B layer targets are multiplied by this gate before smoothing/mixing
+
+REALTIME STRESS
+48 kHz stereo / 2048 frames / matched Deck-B loop + slicer + B FX + repeating low-dominance A/B pulses:
+PASS — finite PCM / no NaN / no Inf
+mean ~1.76 ms
+p95 ~3.14 ms
+p99 ~4.76 ms
+max observed sample peak ~0.281
+Audio quantum budget = 42.67 ms
+
+REGRESSION
+PASS — Deck-B-off neutral mixer output is sample-identical to v31.8.8 (max abs diff = 0.0)
+
+HARDWARE BOUNDARY
+Windows Spotify routing / physical WASAPI / Bluetooth or USB endpoint playback cannot be executed in this Linux validation environment. Final subjective A/B musicality remains a Windows playback test.

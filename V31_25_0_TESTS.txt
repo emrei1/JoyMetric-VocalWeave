@@ -1,0 +1,20 @@
+JoyMetric v31.25.0 GenMind - validation record (2026-09-04)
+===========================================================
+v31.25 GENMIND SUITE (14/14 PASS)
+PASS  AMT worker: /health ready on :8769 (GPU, music-small-800k)
+PASS  AMT worker: writes a part (17 notes in 0.7 s) whose every pitch is allowed at its moment (chord tones on the beats, the key between), in register
+PASS  AMT worker: with our previous part as the prompt it continues in the same register, all notes in the new window
+PASS  melody extraction: 8-note line recovered 8/8 on the right beat and pitch (yin on the harmonic component, < 3 s)
+PASS  composer: sends the record melody and chords as controls, asks for one instrument, samples 2 candidates
+PASS  composer: picks the candidate matching the density target and GrooveNet placement (8 on-beat notes, not the 32-note one)
+PASS  composer: the part is rendered by the rack inside the block, in key against the source (inkey >= 0.9), level set
+PASS  composer: starts quantised to the grid and carrying the record micro-timing (+0.2 cells = 25 ms)
+PASS  composer: remembers the part as the prompt of the next window (continuity)
+PASS  rack score: written notes start where written (within 8 ms), electric-piano preset, in-chord histogram
+PASS  planner: every PEAK / COLOR block carries a generated part; no rack plucks or arps; rack pads only as a bed on the first PEAK block
+PASS  planner: generated parts alternate roles inside a window (pad / pluck) and stay lowkey (<= 0.55x)
+PASS  agent: generated parts are composed from the lookahead and scheduled as clips; status shows the composer
+PASS  agent: with the worker down the same layers fall back to the rack (no silence, no error)
+
+REGRESSION: v31.24 14/14 · v31.23 79/79 (policy updated) · v31.22 24/24 · v31.21 17/17 · v31.10-v31.20 + beat clock unchanged
+TOTAL 386/386

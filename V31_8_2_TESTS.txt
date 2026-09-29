@@ -1,0 +1,23 @@
+JoyMetric v31.8.2 — Clean Headroom Validation
+=============================================
+
+PASS — Python compile: app.py, agentic_live_dj.py, dj_director_v3.py, device_scan_worker.py, realtime_native_engine.py, realtime_semantic_server.py, processor.py
+PASS — JavaScript syntax: static/app.js
+PASS — DJ Director V3 files retained.
+PASS — v31.8.1 start/route handshake retained.
+PASS — Shared Mix Authority added between Agentic controller and Realtime StudioDSP.
+PASS — Performance residual RMS guard added before StudioDSP.
+PASS — Performance pre-DSP peak target <= ~0.82 in aggressive synthetic test.
+PASS — Echo feedback / return-energy safety tightened.
+PASS — Riser/reverse/snare/impact top-end noise softened and bandwidth-limited.
+PASS — finite PCM / no NaN / no Inf.
+
+Aggressive synthetic 174 BPM comparison, 48 kHz stereo / 2048 frames:
+  v31.8.1 pre-StudioDSP peak max ~1.1719
+  v31.8.1 worst limiter reduction ~-2.9905 dB
+  v31.8.2 pre-StudioDSP peak max ~0.8200
+  v31.8.2 worst limiter reduction ~-0.0474 dB
+
+Realtime load note:
+- Agentic mixer itself remains low-cost (p99 ~5 ms in local stress run).
+- Full Linux fallback-DSP timings are not representative of the Windows Pedalboard-native core; the target Windows run remains the final xrun validation.

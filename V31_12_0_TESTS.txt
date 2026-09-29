@@ -1,0 +1,46 @@
+JoyMetric v31.12.0 — FullRemix Validation
+=========================================
+
+STATIC
+PASS  py_compile: app.py · agentic_live_dj.py · dj_director_v3.py
+      realtime_native_engine.py · musical_intelligence.py
+PASS  node --check static/app.js
+
+FULLREMIX SUITE (21/21 PASS)
+
+ENGINE · REDRUM
+PASS  four-on-the-floor kicks land exactly on the beat
+      (silence input: low-band peak/trough ratio effectively infinite)
+PASS  output finite and bounded (max 0.029 at level 0.8 over silence)
+PASS  effective level + pattern name published in mixer status (FLOOR)
+PASS  NEUTRAL REGRESSION: fx_redrum keys at defaults => output
+      sample-identical to a legacy controls dict
+
+POLICY SCALING
+PASS  creativity 1.0  -> remix_intensity 0.85 (unmistakable)
+PASS  creativity 0.35 -> remix_intensity 0 (tasteful DJ preserved)
+PASS  "full remix" prompt forces >=0.75 even at creativity 0.5
+PASS  "no remix" prompt opt-out -> 0
+PASS  hip-hop style -> HALF pattern · "breakbeat" keyword -> BREAK pattern
+
+REMIX ARRANGER (60 simulated seconds at creativity max)
+PASS  arranger enabled
+PASS  section cycle advances (GROOVE+ -> ROLL -> ...)
+PASS  redrum persistently audible: 100% of ticks above threshold after warmup
+PASS  REMIX_* entries in performance history
+PASS  redrum pattern applied to controller
+PASS  status() exposes remix block (section, until_beat, intensity, pattern)
+PASS  resident Deck-B layer held at ~0.28 (not decaying pulses)
+PASS  pump groove held at ~0.28
+PASS  silent at low creativity with a plain prompt (redrum 0.000)
+PASS  "full remix" prompt overrides low creativity (redrum 0.729)
+PASS  MACRO_CLEAN_RESET parks the arranger for a genuinely clean bar
+
+REGRESSION
+PASS  StageCraft suite 29/29
+PASS  v31.10 suite 32/32
+TOTAL 82/82
+
+VALIDATION BOUNDARY
+Subjective remix quality over the real Spotify -> WASAPI route requires ears
+on the target Windows machine.

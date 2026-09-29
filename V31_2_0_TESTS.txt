@@ -1,0 +1,29 @@
+JoyMetric v31.2.0 — Neural Agentic DJ Validation
+
+PASS — Python compile: app.py, agentic_live_dj.py, device_scan_worker.py, realtime_native_engine.py, realtime_semantic_server.py
+PASS — JavaScript syntax: static/app.js
+PASS — v31.1.2 audio/routing parity (byte-for-byte):
+  realtime_native_engine.py
+  device_scan_worker.py
+  INSTALL_JOYMETRIC_DRIVER.ps1
+  SETUP_AND_START.ps1
+  driver/patch_joymetric_driver.py
+PASS — neural decision unit: phrase/instrumental mock CLAP state selected ROLL_1
+PASS — professional restraint unit: stable-groove mock CLAP state selected NO_ACTION
+PASS — neural-worker failure isolation: simulated brain outage left the realtime agent running in fallback mode
+PASS — /agent-state endpoint + prompt-conditioned action embedding bank present
+PASS — neural calls live only in agentic_live_dj.py / realtime_semantic_server.py; native realtime engine is unchanged from v31.1.2
+PASS — bounded 15 s MIR analyzer: 79.7–87.5 ms in local synthetic test
+PASS — 250 ms transient-pressure guard wired into creative-action critic
+PASS — ~60 s temporal memory: 24 neural observations retained, with embedding novelty and state trend scoring
+PASS — guarded Spotify BEATJUMP_FWD / BEATJUMP_BACK added to agent action space
+
+Important validation boundary:
+The Linux build environment does not contain the persisted JoyMetric Windows CLAP model cache or Windows WASAPI stack, so the complete LAION CLAP forward pass and Spotify/WASAPI route cannot be executed here. Neural request/decision/failure paths were unit-tested with a deterministic mock. On the user's Windows installation, v31.2.0 reuses the same isolated semantic environment and laion/clap-htsat-unfused model already used by JoyMetric; the new /agent-state endpoint performs the real audio forward pass there.
+
+Design safety:
+- No neural inference in audio callback.
+- NO_ACTION is a first-class candidate.
+- Creative actions are quantized to musical boundaries.
+- Transient, vocal, low-end, repetition, and loop-state penalties are applied by the critic.
+- The v30.4.47 LowEndIntegrity/CrackleGuard audio path is untouched via realtime_native_engine.py parity.

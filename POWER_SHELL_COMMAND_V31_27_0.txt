@@ -1,0 +1,4 @@
+# JoyMetric v31.27.0 SongMind - launch
+Set-Location "C:\Users\inceo\music_rec\JoyMetric_Workstation_UI_v31_27_0_SongMind"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_SONGMIND.ps1
+# JOY_SONGMIND=<path> overrides the model; JOY_GEN_AI=0 disables the generative composer; JOY_GEN_FALLBACK=1 re-enables rack fallback

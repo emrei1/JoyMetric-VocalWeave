@@ -1,0 +1,53 @@
+JoyMetric v31.14.0 — TimeWeaver Validation
+==========================================
+
+STATIC
+PASS  py_compile: app.py · agentic_live_dj.py · dj_director_v3.py
+      realtime_native_engine.py · musical_intelligence.py
+PASS  node --check static/app.js
+
+TIMEWEAVER SUITE (21/21 PASS)
+
+REDRUM PATTERN DNA
+PASS  bars mutate with fx_redrum_var (bar fingerprint diff 0.163 vs 0.018 static)
+PASS  every 4th bar carries an auto-fill (4-periodic tail contrast 0.59)
+
+KEYBASS (key-following synth bassline)
+PASS  root A lands at 54.1 Hz · root D retunes to 74.0 Hz
+PASS  PULSE pattern sits on the offbeats (0.0398 vs 0.0000 on-beat)
+PASS  finite / bounded
+
+TIMEWEAVE (amplitude-encoded carrier proofs)
+PASS  JUMPBACK plays the input from exactly 4 beats earlier
+      (decoded 0.0731 = expected; live would be 0.1400)
+PASS  JUMPBACK returns to live sample-exactly after the effect
+PASS  FLASHFORWARD plays audio the listener has NOT heard yet
+      (decoded 0.3540 = material 16 beats ahead; live=0.1650)
+PASS  INTERLEAVE alternates present/future beat cells
+      (future-cell fraction 0.51, live cells present)
+
+COMPATIBILITY
+PASS  neutral-controls output sample-identical to a legacy controls dict
+
+ARRANGER 2.0 (240 simulated seconds, creativity max)
+PASS  rich section vocabulary (>=4 distinct sections)
+PASS  new sections reachable (PERC / STAB_GROOVE / BASSLINE pool)
+PASS  20 distinct per-instance DNA signatures (no two passes identical)
+PASS  keybass held audibly · pattern DNA driven (fx_redrum_var 0.73)
+PASS  stabilized key root + confidence posted to the engine (Am -> 9, conf 1.0)
+PASS  MACRO_WEAVE + MACRO_FLASHFWD pads accepted
+
+DIRECTOR
+PASS  future_echo_reveal competes among candidates
+PASS  FLASH_FORWARD family generated (collapse now re-slots, not drops)
+
+REGRESSION
+PASS  GridLock   12/12
+PASS  FullRemix  21/21
+PASS  StageCraft 29/29
+PASS  v31.10     32/32
+TOTAL 115/115
+
+VALIDATION BOUNDARY
+Subjective feel over the real Spotify -> WASAPI route needs ears on the
+target machine.

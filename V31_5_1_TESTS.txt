@@ -1,0 +1,69 @@
+JoyMetric v31.5.1 — CrackleGuard + Headphone Output validation
+================================================================
+
+STATIC
+- PASS: py_compile app.py
+- PASS: py_compile agentic_live_dj.py
+- PASS: py_compile realtime_native_engine.py
+- PASS: py_compile realtime_semantic_server.py
+- PASS: py_compile device_scan_worker.py
+- PASS: node --check static/app.js
+
+PROTECTED DSP REGRESSION
+- PASS: RealtimeDSP AST identical to v31.5.0
+- PASS: MasterSafetyCompressor AST identical to v31.5.0
+- PASS: SourceFidelityGuard AST identical to v31.5.0
+- PASS: LookaheadPeakLimiter AST identical to v31.5.0
+
+CRACKLE / SCHEDULER HARDENING
+- PASS: Agentic managed Spotify route default processing quantum = 2048 frames
+- PASS: physical Audio Out write quantum >= 4096 frames
+- PASS: 48 kHz processing deadline increases from 21.33 ms to 42.67 ms
+- PASS: output worker remains decoupled through elastic FIFO
+- PASS: idle ProfessionalFXRack has true zero-work bypass
+- PASS: echo feedback hard-capped at 0.54 inside the DSP rack
+- PASS: TRANS/GATE hard-capped at 0.50 inside the DSP rack
+- PASS: runtime playback underrun arms temporary FX CrackleGuard
+- PASS: FX CrackleGuard preserves core/impact path and gradually restores expensive FX
+
+HEADPHONE / OUTPUT ROUTING
+- PASS: sounddevice WASAPI outputs missing from PyAudio enumeration are merged into the device list
+- PASS: sounddevice-only endpoint receives stable runtime id sd:<index>
+- PASS: exact sounddevice device index is used when that endpoint is selected
+- PASS: sounddevice path uses high-latency WASAPI safety mode
+- PASS: stereo/music endpoint requirement gives explicit Hands-Free/Headset guidance
+- PASS: output native rate is considered before 48 kHz / 44.1 kHz compatibility fallbacks
+
+MOCK HEADPHONE ENUMERATION
+PyAudio mock: Speakers (Realtek) only
+sounddevice WASAPI mock: Speakers (Realtek) + WH-1000XM Headphones
+- PASS: duplicate Speakers endpoint not added twice
+- PASS: WH-1000XM Headphones added as sd:1 and remains selectable
+
+FULL DSP STRESS TEST
+Environment: Linux artifact validation, 48 kHz stereo, 2048-frame blocks.
+Active simultaneously:
+- riser 0.92
+- reverse swell 0.86
+- snare rush 0.92
+- impact 1.00
+- drum drive 0.78
+- double-time 0.80
+- FX rack wet 0.72
+- beat echo send 0.82
+- requested feedback 0.56 (DSP hard-cap 0.54)
+- trans gate 0.50 at 4x
+- wet width 0.82
+- return duck 0.90
+- existing RealtimeDSP master stage
+
+Results over 700 blocks (30 warmup excluded):
+- PASS: finite PCM / no NaN / no Inf
+- peak after tested DSP chain: ~0.341 linear
+- mean processing: ~16.08 ms/block
+- p95: ~20.83 ms/block
+- p99: ~27.06 ms/block
+- realtime processing budget: 42.67 ms/block
+
+VALIDATION BOUNDARY
+Actual Windows WASAPI / Bluetooth hardware / JoyMetric Virtual Driver / Spotify integration cannot be executed in the Linux artifact environment. The first Windows run remains the final hardware validation.

@@ -1,0 +1,4 @@
+# JoyMetric v31.23.0 RackMind - launch
+Set-Location "C:\Users\inceo\music_rec\JoyMetric_Workstation_UI_v31_23_0_RackMind"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_SONGMIND.ps1
+# UI: http://127.0.0.1:8765   (JOY_SYNTH_AI=1 re-enables the Stable Audio composer; JOY_SYNTH_RACK=0 disables the rack)

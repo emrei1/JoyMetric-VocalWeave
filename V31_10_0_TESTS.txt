@@ -1,0 +1,65 @@
+JoyMetric v31.10.0 — Musical Mind Validation
+============================================
+
+STATIC
+PASS  python -W error::SyntaxWarning -m py_compile:
+      app.py
+      agentic_live_dj.py
+      dj_director_v3.py
+      realtime_native_engine.py
+      musical_intelligence.py
+PASS  node --check static/app.js
+
+FUNCTIONAL HARNESS (fake engine, real modules — 32/32 PASS)
+
+SLIDER LIFE (dead-deck bug root fix)
+PASS  a_high_db breathes continuously        span ~= 0.751 dB over 12 s
+PASS  a_mid_db breathes                      span ~= 0.260 dB
+PASS  a_filter micro-motion                  span ~= 0.057
+PASS  motion stays bounded                   max |value| ~= 0.45
+PASS  engine receives every controller update
+PASS  agent never latches manual from agent motion
+
+MANUAL OVERRIDE (replaces the permanent manual latch)
+PASS  autopilot survives a slider touch (no manual latch)
+PASS  touched value applies immediately
+PASS  override holds against agent motion during the hold window
+PASS  override expires -> agent resumes the parameter (3.0 dB -> -0.05 dB)
+PASS  status() exposes per-key remaining hold seconds
+
+CONTRARY-MOTION TRANSITIONS (rise/fall duet)
+PASS  AB_CONTRARY_RISE schedules opposing lanes:
+      a_gain end<start · b_layer end>start · a_filter -> negative (LP) · b_low_db end>start
+PASS  transition state active (name=CONTRARY RISE, b_role=RISE)
+PASS  Deck A audibly falls    a_gain 1.000 -> 0.948 over ~8 beats
+PASS  Deck B audibly rises    b_layer 0.000 -> 0.240
+PASS  MACRO_DROP retires all in-flight contrary lanes
+PASS  landing restores Deck A (a_gain=1.0, b_layer=0)
+
+DJ DIRECTOR V5 (musical critic)
+PASS  plan() produces events with musical context
+PASS  contrary families compete in the candidate pool
+      (AB_CONTRARY_RISE / AB_CONTRARY_FALL / BASS_SWAP_GLIDE / AB_BREATH present)
+PASS  phrase-aligned landing: raw target 40 quantized to phrase boundary 42 (16-beat grid)
+PASS  critic exposes tension_fit / arc_fit components (0.83 / 0.75 in the run)
+PASS  falling arc offers seesaw/space archetypes (ab_seesaw_dialogue, bass_swap_glide, ...)
+
+MUSICAL INTELLIGENCE CORE
+PASS  TensionField charges under riser+gate (0 -> 0.386)
+PASS  notify_release discharges (0.386 -> 0.108) and enters refractory
+PASS  PhraseClock locks a musical grid (L=16, conf ~= 0.75)
+PASS  Camelot mapping (Am -> 8A, C -> 8B)
+PASS  circle-of-fifths compatibility (Am~C = 0.90, C~F# = 0.05)
+PASS  HarmonicField vote-stabilizes key (F#m / 11A)
+
+ENGINE MIXER TELEMETRY
+PASS  status publishes effective a/b low·mid·high·filter·gain + reverb/echo
+PASS  neutral-controls PCM finite
+PASS  telemetry does not alter audio (sample-identical across instances, same input/controls)
+PASS  effective values track control targets through the smoothers
+      (a_gain 1.0 -> 0.6 · a_low 0 -> -5.0 dB · a_filter 0 -> -0.4)
+
+VALIDATION BOUNDARY
+The harness cannot execute the real Windows Spotify -> JoyMetric Virtual Input ->
+physical WASAPI route. Final subjective musical quality and hardware xrun
+behavior must be validated on the target Windows machine.

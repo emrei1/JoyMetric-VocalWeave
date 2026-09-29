@@ -1,0 +1,23 @@
+JoyMetric v30.4.41 TESTS
+
+PASS - patch_joymetric_driver.py on UTF-16 synthetic upstream INF fixture.
+PASS - KSCATEGORY_RENDER WaveSpeaker registration preserved.
+PASS - ROOT\\JoyMetricVirtualAudio branding present.
+PASS - speaker transport remains stock 48 kHz / stereo / PCM16.
+PASS - old PCM32 markers (32-bit speaker / 384000 B/s) absent from v0.2 patch.
+PASS - realtime_native_engine.py py_compile.
+PASS - app.py py_compile.
+PASS - realtime_semantic_server.py py_compile.
+PASS - static/app.js node --check.
+PASS - feature_params AST parity vs v30.4.40.
+PASS - RealtimeDSP AST parity vs v30.4.40.
+PASS - TransparentAutoGainStage AST parity vs v30.4.40.
+PASS - WASAPI loopback format fallback includes float32 + PCM16 + PCM32.
+PASS - SETUP_AND_START requires a JoyMetric render MMDevice endpoint, not only the Media controller.
+PASS - elevated installer verifies the render endpoint after install.
+
+Windows-only remaining validation:
+- Build/sign/install v0.2 driver with the already-installed WDK toolchain.
+- Confirm Windows Sound Output list contains Speakers (JoyMetric Virtual Audio Driver) or equivalent JoyMetric render endpoint.
+- Confirm Spotify is automatically routed there by LET'S GO.
+- Confirm JoyMetric private WASAPI loopback meter is non-zero during Spotify playback.

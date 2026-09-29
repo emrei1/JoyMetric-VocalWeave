@@ -1,0 +1,68 @@
+JoyMetric v31.8.5 — Deck B Remix Engine Validation
+===================================================
+
+STATIC
+- PASS: python py_compile app.py agentic_live_dj.py dj_director_v3.py realtime_native_engine.py realtime_semantic_server.py device_scan_worker.py processor.py
+- PASS: node --check static/app.js
+- PASS: duplicate HTML ids = 0
+- 24 parameterized Director families; 6 new Deck B families.
+
+DECK B REMIX ACTIONS
+- DECKB_GHOST
+- DECKB_DRUM_LAYER
+- DECKB_HARMONIC_BED
+- DECKB_TEASE
+- DECKB_SWAP
+- DECKB_RELEASE
+
+DIRECTOR TESTS
+Synthetic rising / DnB boundary, creativity=max:
+- selected: Deckb Drums Roll
+- families included DECKB_DRUM_LAYER -> DECKB_GHOST -> ROLL_ACCEL -> DROP -> DECKB_RELEASE
+- 3 Deck B gestures in the selected phrase plan.
+
+Synthetic falling boundary:
+- selected a Deck B tease/call-response plan.
+- 3 Deck B gestures in selected phrase plan.
+
+High-vocal rising boundary:
+- Deck B remains available, but realtime execution converts risky full swaps into low-level percussive ghost layering.
+- Low-end cuts + vocal guard remain active.
+
+REALTIME DECK B STRESS
+48 kHz stereo / 2048 frames, source-derived percussive Deck B layer plus active transition FX:
+- mean ~2.57 ms
+- p95 ~3.14 ms
+- p99 ~3.44 ms
+- max observed ~7.67 ms
+- audio block budget: 42.67 ms
+- peak ~0.2102
+- finite PCM / no NaN / no Inf
+
+NEUTRAL REGRESSION
+- With new Deck B controls at zero, v31.8.5 RealtimeDJMixer output vs v31.8.4 was sample-identical in the neutral synthetic comparison (max abs diff = 0).
+
+MASTER / ROUTE REGRESSION
+AST-identical to v31.8.4:
+- RealtimeDSP
+- MasterSafetyCompressor
+- SourceFidelityGuard
+- LookaheadPeakLimiter
+
+Byte-identical to v31.8.4:
+- app.py
+- device_scan_worker.py
+- INSTALL_JOYMETRIC_DRIVER.ps1
+- SETUP_AND_START.ps1
+- realtime_semantic_server.py
+
+DESIGN SAFETY
+- Deck B layer is correlation-aware; correlated A/B content automatically reduces B layer gain.
+- Percussive Deck B focus removes low/body energy before layering.
+- Harmonic-bed mode is deliberately low-level and band-limited.
+- High vocal activity suppresses full Deck B swaps and degrades them into a smaller percussive ghost layer.
+- Graceful release waits for crossfader and Deck B layer to return near zero before retiring the loop.
+- No model call / network request / filesystem operation added to the realtime callback.
+
+VALIDATION BOUNDARY
+Physical Windows Spotify -> JoyMetric Virtual Driver -> selected WASAPI output cannot be run in this Linux artifact environment. Final subjective musical-quality and hardware-xrun validation must occur on the user's Windows machine.

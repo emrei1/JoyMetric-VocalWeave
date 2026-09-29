@@ -1,0 +1,37 @@
+JoyMetric Workstation v30.4.44 — Auto Spotify Route + Continuous Audio
+
+Root causes fixed
+-----------------
+1. v30.4.40-v30.4.43 called router.refresh() from _ManagedVirtualChannelInputStream.read().
+   refresh() launched SoundVolumeCommandLine subprocesses every ~2 seconds and could block the
+   realtime capture producer long enough to drain the playback FIFO. This matches the reported
+   repeating 3-second audio / silence / audio symptom after manually routing Spotify to JoyMetric.
+
+2. Automatic routing depended primarily on the PyAudio-visible endpoint label. v30.4.44 enumerates
+   SVCL's own sound-item table and resolves the exact JoyMetric Command-Line Friendly render ID
+   before /SetAppDefault is applied.
+
+Runtime changes
+---------------
+- LET'S GO resolves exact JoyMetric render ID once.
+- Persistent process-name routing is applied first, PID fallback second.
+- No SVCL subprocess is launched from the realtime read path.
+- No process enumeration is launched from the realtime read path.
+- JoyMetric self-session COM volume guard is disabled for the managed virtual-channel playback path.
+- Driver and DSP are unchanged from v30.4.43.
+
+Tests
+-----
+Exact SVCL render-ID resolution: PASS
+Auto-route command emitted: PASS
+SVCL calls at start: 2
+SVCL calls added by 1000 realtime reads: 0
+Realtime read subprocess isolation: PASS
+RealtimeDSP parity vs v30.4.43: PASS
+feature_params parity vs v30.4.43: PASS
+TransparentAutoGainStage parity vs v30.4.43: PASS
+Driver patch parity vs v30.4.43: PASS
+Managed-channel periodic COM guard disabled: PASS
+
+Python compile: PASS
+JavaScript syntax: PASS

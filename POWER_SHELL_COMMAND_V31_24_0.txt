@@ -1,0 +1,4 @@
+# JoyMetric v31.24.0 GrooveNet - launch
+Set-Location "C:\Users\inceo\music_rec\JoyMetric_Workstation_UI_v31_24_0_GrooveNet"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_SONGMIND.ps1
+# JOY_GROOVENET=0 disables the neural placement (canned patterns), JOY_SYNTH_TIMBRE=0 the CLAP instrument choice

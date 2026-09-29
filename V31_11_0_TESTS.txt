@@ -1,0 +1,61 @@
+JoyMetric v31.11.0 — StageCraft Validation
+==========================================
+
+STATIC
+PASS  python -W error::SyntaxWarning -m py_compile:
+      app.py · agentic_live_dj.py · dj_director_v3.py
+      realtime_native_engine.py · musical_intelligence.py
+PASS  node --check static/app.js
+
+STAGECRAFT SUITE (29/29 PASS — fake engine + real RealtimeDJMixer DSP)
+
+ENGINE · SPINBACK / BRAKE
+PASS  backspin engages on seq trigger (mode=BACKSPIN, winding u reported)
+PASS  effect output diverges from live program
+PASS  effect completes and releases on schedule
+PASS  every block finite (no NaN/Inf)
+PASS  live program returns after the effect (rms 0.119)
+PASS  power-off brake winds to silence (tail rms 0.0000)
+
+ENGINE · PUMP / BASS CUT / LADDER
+PASS  beat-locked sidechain breathing (full cycle depth at 0.6 pump)
+PASS  pump is bounded — never boosts
+PASS  bass cut strips a 60 Hz floor (rms 0.168 -> 0.024)
+PASS  effective fx_bass_cut published in mixer status
+PASS  NEUTRAL REGRESSION: new controls at defaults produce output
+      sample-identical to a legacy controls dict (no new keys)
+
+AGENT · QUANT_BUILD (produced-EDM build)
+PASS  lanes scheduled: noise_riser + fx_rush_accel + fx_bass_cut + fx_snare_rush (+width/high)
+PASS  bass strip audible mid-build (0.72)
+PASS  rush ladder climbs to 1.0 (1/4 -> 1/32 grid acceleration)
+PASS  MACRO_DROP slams the floor back (bass_cut=0, ladder=0) and resyncs the pump
+
+AGENT · SPINBACK / ROLL LADDER
+PASS  spinback seq trigger + backspin mode (single trigger, no double-arm)
+PASS  transition state = SPINBACK
+PASS  roll ladder: first capture immediate (2.0 beats)
+PASS  three deferred recaptures queued
+PASS  recaptures fire beat-quantized and halve to 0.25 beats
+
+MUSICAL INTELLIGENCE · SECTION NARRATOR
+PASS  GROOVE -> PEAK approach labeled (8 beats ahead)
+PASS  rising direction labeled BUILD
+PASS  PEAK -> BREAK approach labeled
+
+DIRECTOR V5 · SHOWMANSHIP
+PASS  spinback_reveal / quantized_build_drop / roll_ladder_drop compete
+PASS  SPINBACK / QUANT_BUILD / ROLL_LADDER / PUMP_GROOVE families in pool
+PASS  PEAK boundary: critic selects spinback_reveal (section_fit term)
+PASS  BREAK boundary: brake_fakeout + echo_spin_exit offered
+PASS  MACRO_SPINBACK pad accepted, quantized to next beat
+PASS  MACRO_BUILD pad accepted
+
+V31.10 REGRESSION SUITE
+PASS  32/32 (slider-life, overrides, contrary motion, drop cleanup, director
+      musical critic, tension/phrase/camelot, mixer telemetry; tension charge
+      threshold recalibrated to the rebalanced v31.11 driver weights)
+
+VALIDATION BOUNDARY
+Real Spotify -> JoyMetric Virtual Input -> physical WASAPI routing and final
+subjective quality require the target Windows machine.

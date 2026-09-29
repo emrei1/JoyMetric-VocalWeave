@@ -1,0 +1,44 @@
+JoyMetric v31.8.4 — Agentic Authority Boost Validation
+Date: 2026-08-31
+
+STATIC
+PASS — Python compile: app.py, agentic_live_dj.py, dj_director_v3.py, realtime_native_engine.py, realtime_semantic_server.py, device_scan_worker.py
+PASS — JavaScript syntax: static/app.js
+
+POLICY AUTHORITY
+PASS — creativity 0.35 => agentic_authority 1.0x.
+PASS — creativity 1.00 => agentic_authority 3.6x.
+PASS — max creativity uses commit_beats=1 and 7 temporal segments.
+PASS — max action density is bounded at <=0.99.
+
+DIRECTOR V3 AUTHORITY TEST
+Synthetic rising / drum-dense boundary with DnB concert prompt:
+- Creativity 0.35: 4 gestures, weighted intensity×duration ~= 5.62.
+- Creativity 1.00: 6 gestures, weighted intensity×duration ~= 15.95.
+- High-authority example: GROOVE_LIFT → TENSION → FILTER_SWEEP → ROLL_ACCEL → DROP → PUNCH_IN.
+PASS — controller values remain clamped to existing safe ranges; no raw 3.6x sample multiplication.
+
+FX PERSISTENCE
+At max authority, controller release half-life is extended without increasing raw gain:
+- riser/reverse persistence ~= 2.95x baseline
+- snare-rush persistence ~= 2.31x baseline
+- echo-send persistence ~= 2.78x baseline
+- rack-wet persistence ~= 3.60x baseline
+
+SOURCE-AWARE FX / REALTIME STRESS
+48 kHz stereo / 2048-frame source-aware transition FX stress:
+PASS — finite PCM / no NaN / no Inf.
+PASS — max sample peak ~= 0.2791.
+Mean mixer processing ~= 2.99 ms/block.
+p95 ~= 3.82 ms/block.
+p99 ~= 4.09 ms/block.
+Realtime block budget = 42.67 ms.
+
+REGRESSION INTENT
+- v31.8.3 source-aware FX synthesis retained.
+- v31.8.2 shared-headroom strategy retained.
+- No master-gain multiplier was introduced.
+- Headphone/start-route/CrackleGuard protections remain inherited.
+
+VALIDATION BOUNDARY
+Final subjective Spotify/WASAPI listening must be performed on the user's Windows machine.

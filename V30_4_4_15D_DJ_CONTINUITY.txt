@@ -1,0 +1,10 @@
+JoyMetric v30.4.4 — 15D Continuous DJ
+
+- Removed Auto DSP / 50D product mode and UI.
+- Realtime sound control is now only the visible 15 relative musical features.
+- Reduced old x5 feature-domain gain to 0.85 for musical, non-exaggerated moves.
+- DJ no longer applies hidden raw-DSP node offsets or x5 studio render expansion.
+- DJ target limited to ±0.68, top 5 active features, hysteresis and smaller control steps.
+- DJ decisions are timestamped onto the ~2 s delayed source timeline.
+- Feature target has a 1.10 s control smoother plus 0.48 units/s slew limit.
+- Native DSP C2 parameter trajectory, persistent time-FX state, sample-ramped wet/dry, AutoGain and true-peak limiter remain.

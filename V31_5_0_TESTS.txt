@@ -1,0 +1,80 @@
+JoyMetric v31.5.0 — Performance FX Rack validation
+===================================================
+
+STATIC
+- PASS: py_compile app.py
+- PASS: py_compile agentic_live_dj.py
+- PASS: py_compile realtime_native_engine.py
+- PASS: py_compile realtime_semantic_server.py
+- PASS: py_compile device_scan_worker.py
+- PASS: node --check static/app.js
+
+PROTECTED AUDIO / ROUTING REGRESSION
+- PASS: RealtimeDSP AST identical to v31.4.0
+- PASS: MasterSafetyCompressor AST identical to v31.4.0
+- PASS: SourceFidelityGuard AST identical to v31.4.0
+- PASS: LookaheadPeakLimiter AST identical to v31.4.0
+- JoyMetric driver / Spotify route setup scripts were not redesigned by v31.5.
+
+PERFORMANCE FX RACK
+- PASS: preallocated tempo-synchronised SEND/RETURN delay bus present
+- PASS: bounded feedback saturation
+- PASS: SEND can close while feedback RETURN tail persists
+- PASS: filtered ping-pong return
+- PASS: program-dependent echo-return ducking
+- PASS: wet-bus stereo width
+- PASS: BPM-synchronised high-band TRANS/GATE
+- PASS: low-frequency content is not directly chopped by the gate
+- PASS: impact uses momentary program ducking for headroom
+
+NEURAL / PROMPT ACTION SPACE
+- PASS: FX_BEAT_ECHO action prototype present
+- PASS: FX_TRANS_GATE action prototype present
+- PASS: direct post-fader / ping-pong echo prompt vocabulary present
+- PASS: direct gated/chopped transition vocabulary present
+- PASS: direct wide/stereo FX vocabulary present
+
+PROMPT COMPILER SPOT CHECK
+Prompt: drum n bass like speed and drums a banger, smooth professional, strong sound fx, post-fader echo out and gated build
+- style: drum-and-bass
+- FX profile: dnb-banger
+- FX presence: 0.94
+- echo intent: 0.846
+- phrase/rhythm accent intent: 0.90
+- space/width intent: 0.5336
+
+Prompt: dreamy hypnotic wide transition with ping pong echo and reverse swell
+- style: dreamy
+- FX profile: dreamy-space
+- FX presence: 0.78
+- echo intent: 0.94
+- space/width intent: 0.88
+
+FULL DSP STRESS TEST
+Environment: Linux artifact validation, 48 kHz stereo, 1024-frame blocks.
+Synthetic bass-heavy 88-BPM source.
+Active simultaneously:
+- riser 0.92
+- reverse swell 0.86
+- snare rush 0.92
+- impact 1.00
+- drum drive 0.78
+- double-time 0.80
+- FX rack wet 0.72
+- beat echo send 0.82
+- feedback 0.56
+- trans gate 0.50 at 4x
+- wet width 0.82
+- return duck 0.90
+- existing RealtimeDSP master stage
+
+Results over 1200 blocks:
+- PASS: finite PCM / no NaN / no Inf
+- peak after tested DSP chain: ~0.338 linear
+- mean processing: ~10.15 ms/block
+- p95: ~13.93 ms/block
+- p99: ~16.82 ms/block
+- realtime budget: 21.33 ms/block
+
+VALIDATION BOUNDARY
+Actual Windows WASAPI, JoyMetric Virtual Driver, Spotify routing, and subjective transition quality cannot be executed in the Linux artifact environment. The first Windows listening run remains the final hardware/integration validation.

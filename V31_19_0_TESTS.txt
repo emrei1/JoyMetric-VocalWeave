@@ -1,0 +1,38 @@
+JoyMetric v31.19.0 - DrumMind Validation
+========================================
+
+STATIC
+PASS  py_compile: agentic_live_dj.py / realtime_native_engine.py / drum_brain.py / drum_kit.py / beat_clock.py
+PASS  node --check static/app.js
+
+TRAINING (Groove MIDI Dataset, RTX 5070, 19 s)
+      20522 two-bar windows (16457/2000/2065), 30 epochs
+      test hit-F1 given true accents: kick 0.836 / snare 0.769 / closed hat 0.872 / open hat 0.237
+      retrieval-of-real-grooves baseline: 0.783 / 0.705 / 0.672 / 0.150
+
+DRUMMIND SUITE (25/25 PASS)
+PASS  weights + 6000-groove library load
+PASS  test hit-F1 beats the retrieval baseline on kick / snare / hat
+PASS  house context: kicks on all four beats, 0 off-beat kicks (fit 0.78)
+PASS  house context: snare only on the backbeat
+PASS  generation cost 7.5 ms per 2-bar phrase
+PASS  hip-hop context: no kick on the record snare-only backbeat
+PASS  hip-hop context: kicks reinforce the record kick steps
+PASS  microtiming present and bounded (median 3.7 ms at 124 BPM)
+PASS  phrase-to-phrase variation without losing the kick grid
+PASS  kit: closed hat sampled from the record (isolation 5.5, centroid 14.7 kHz, 75 ms)
+PASS  kit: kick tuned to the record fundamental (58.6 Hz for 55 Hz), low-band dominated
+PASS  kit: noise / beat-less material falls back to synthesis
+PASS  sample layer: sample mode, voices rendered, no clipping
+PASS  sample layer: hats on the anchored 16th grid (spread 3.1 ms, recorded attack)
+PASS  sample layer: kicks on the anchored beats (median 0.7 ms)
+PASS  sample layer: status carries the kit label
+PASS  sample layer cost 0.68 ms per block
+PASS  e2e (30 s real time): kit built from the record, 7 patterns posted, 556/705 blocks in sample mode
+PASS  e2e: drummer low hits on the record beats (median 1.7 ms, p90 11 ms)
+PASS  e2e: hats on the 16th grid with humanized microtiming (median 7.4 ms, p90 12 ms)
+PASS  e2e: no agent error / status exposes drum_ai
+
+REGRESSION
+PASS  v31.18 21/21 / BeatClock 14/14 / v31.17 18/18 / v31.16 24/24 / v31.15 11/11 / v31.14 21/21 / v31.13 12/12 / v31.12 21/21 / v31.11 29/29 / v31.10 32/32
+TOTAL 228/228

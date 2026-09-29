@@ -1,0 +1,60 @@
+JoyMetric v31.6.0 — Unified Concert Agent validation
+====================================================
+
+STATIC
+- PASS: python -m py_compile app.py agentic_live_dj.py realtime_native_engine.py realtime_semantic_server.py device_scan_worker.py processor.py
+- PASS: node --check static/app.js
+- PASS: HTML duplicate ID scan: 0 duplicate IDs
+- PASS: unified Agentic page contains agenticRealtimeFxMount and all five concert performance pads
+- PASS: /api/agentic/prompt and /api/agentic/macro backend routes present
+
+DJ-ACTION ROOT-CAUSE INSPECTION
+- CONFIRMED in v31.5.1: genre morph branch explicitly vetoed all creative neural actions except LOW_END_PROTECT / LOOP_RELEASE
+- CONFIRMED in v31.5.1: native creative actions required phrase-bar quantization plus phase < 0.28
+- CONFIRMED in v31.5.1: bar clock anchored to first audible wall-clock callback rather than measured delayed-PCM beat phase
+- FIXED: morph scene is now a continuous performance bed; concert/neural action queue can execute on top
+- FIXED: beat clock phase-locks to analysis `to_next_beat_sec`
+- FIXED: receding-horizon action queue replaces one-action-per-phrase planning
+
+TEMPORAL AGENT
+Synthetic 15 s trap-ish -> buildup -> dense/double-time transition, 48 kHz stereo:
+- PASS: future buffer split into 5 bar-ish segments
+- PASS: structural descriptors include energy/drums/bass/vocal/melody + novelty + direction
+- PASS: generated concert queue contained MACRO_TENSION -> MACRO_ROLL_ACCEL -> MACRO_DROP
+- observed temporal segment scan in validation run: ~101.92 ms total, out-of-band
+- PASS: no additional per-segment CLAP/network inference is used
+- PASS: near-term 2-beat commit horizon retained while farther events are replannable
+
+DNB CREATIVE-ACTION REGRESSION
+- PASS: with morph_target=dnb, a due MACRO_TENSION executes and produces nonzero riser/rack/filter controls
+- This directly covers the v31.5.1 creative-action veto regression.
+
+UNIFIED PROMPT / UI
+- PASS: LET'S GO sends the Agentic prompt to the existing NativeRealtimeEngine DJ prompt and Agentic policy
+- PASS: effect_intensity is shared with Agentic start instead of hard-coded 1.0
+- PASS: live /api/agentic/prompt updates both engines without forcing manual takeover
+- PASS: the original `.realtime-feature-deck` DOM node is moved into Agentic view and restored to Realtime view; no duplicate 15D controls
+- PASS: timeline renders beat positions when available
+- PASS: status exposes beat_index, beat_phase, future_segments and performance_queue
+
+CONCERT CONTROLLER
+- PASS: beat-quantized shared macros: TENSION, ECHO_OUT, ROLL_ACCEL, DROP, SPACE_BREAK, GROOVE_LIFT
+- PASS: manual performance pads enqueue the same macro vocabulary used by the agent
+- PASS: destructive roll/gate actions are postponed by 2 beats when vocal activity > 0.72
+- PASS: action_density is separate from creativity and prompt-conditioned
+
+AUDIO / HEADPHONE REGRESSION
+- PASS: realtime_native_engine.py is BYTE-IDENTICAL to v31.5.1
+- SHA256: 7ec58843357b48c74e3780206811e1b0851e58cb8451d2385ef8784dbb6d5cfc
+- Therefore v31.5.1 CrackleGuard + headphone enumeration/output fixes are preserved unchanged.
+
+INHERITED v31.5.1 FULL DSP STRESS RESULT
+48 kHz stereo, 2048-frame blocks, heavy performance rack + existing RealtimeDSP:
+- mean ~16.08 ms/block
+- p95 ~20.83 ms/block
+- p99 ~27.06 ms/block
+- realtime processing budget 42.67 ms/block
+- finite PCM / no NaN / no Inf
+
+VALIDATION BOUNDARY
+Actual Windows WASAPI / Bluetooth hardware / JoyMetric Virtual Driver / Spotify integration cannot be executed in this Linux artifact environment. First Windows run remains final hardware validation.

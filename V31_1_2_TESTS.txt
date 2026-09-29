@@ -1,0 +1,29 @@
+JoyMetric v31.1.2 Crash-Safe Audio Scan — validation
+
+STATIC
+PASS  app.py py_compile
+PASS  device_scan_worker.py py_compile
+PASS  realtime_native_engine.py py_compile
+PASS  agentic_live_dj.py py_compile
+PASS  static/app.js node --check
+
+REGRESSION
+PASS  realtime_native_engine.py byte-identical to v31.1.1
+PASS  agentic_live_dj.py byte-identical to v31.1.1
+PASS  driver/patch_joymetric_driver.py byte-identical to v31.1.1
+PASS  INSTALL_JOYMETRIC_DRIVER.ps1 byte-identical to v31.1.1
+
+CRASH-SAFETY DESIGN
+PASS  Flask endpoints no longer call REALTIME_ENGINE.list_devices() directly
+PASS  device scan isolated into disposable subprocess
+PASS  single server-side scan lock
+PASS  1.5 s last-known-good cache
+PASS  worker timeout configured
+PASS  faulthandler backend_fatal.log enabled for remaining native faults
+PASS  hidden Realtime view does not scan on application boot
+PASS  hidden Agentic view does not scan on application boot
+PASS  user-visible view open still triggers a scan
+PASS  manual Realtime Scan can force a fresh isolated scan
+
+LIMITATION
+Windows WASAPI/PyAudioWPatch native behavior cannot be executed in this Linux artifact environment. The isolation architecture is specifically designed so even a Windows-native scan fault cannot terminate the Flask server.

@@ -1,0 +1,51 @@
+JoyMetric v31.4.0 — Pro FX Director Validation
+==============================================
+
+STATIC / SYNTAX
+PASS — Python compile: app.py, agentic_live_dj.py, realtime_native_engine.py, realtime_semantic_server.py
+PASS — JavaScript syntax: static/app.js
+
+PROMPT-CONDITIONED FX POLICY
+PASS — DnB banger prompt: profile=dnb-banger, FX presence=0.94, riser=0.88, reverse=0.90, snare-rush=0.98, impact=1.00.
+PASS — Dreamy prompt: profile=dreamy-space, reverse=0.90, space=0.78, echo=0.82, impact=0.30.
+PASS — very restrained FX prompt: profile=minimal, FX presence=0.18, riser=0.12, reverse=0.10, snare-rush=0.08.
+
+NEURAL FX ACTION BANK
+PASS — FX_RISER added.
+PASS — FX_REVERSE_SWELL added.
+PASS — FX_SNARE_RUSH added.
+PASS — FX_IMPACT added.
+PASS — FX_ECHO_BLOOM added.
+PASS — mock prompt/music-state critic selected FX_IMPACT for a strong drop-oriented prompt/state.
+
+DNB MORPH CHOREOGRAPHY SNAPSHOT (92 BPM trap-like source)
+BAR 1  FOUNDATION      riser=0.000 reverse=0.026 rush=0.000 impact=0.000 drive=0.157 double=0.045
+BAR 5  PROPULSION      riser=0.003 reverse=0.083 rush=0.074 impact=0.000 drive=0.390 double=0.201
+BAR 10 BUILD           riser=0.252 reverse=0.286 rush=0.367 impact=0.000 drive=0.561 double=0.545
+BAR 12 BUILD           riser=0.568 reverse=0.600 rush=0.790 impact=0.000 drive=0.607 double=0.633
+BAR 13 RELEASE         riser=0.000 reverse=0.000 rush=0.000 impact=0.830 drive=0.609 double=0.596
+BAR 15 DNB FEEL LOCK   riser=0.000 reverse=0.000 rush=0.028 impact=0.000 drive=0.574 double=0.510
+PASS — transition FX become dominant late in the build, clear on release, and do not stay pasted over the locked groove.
+
+REALTIME STRESS
+48 kHz stereo / 1024 frames
+Active: riser 0.92, reverse 0.88, snare-rush 0.92, impact 1.00, drum-drive 0.78, double-time 0.78 + RealtimeDSP.
+PASS — finite PCM / no NaN / no Inf.
+Mean: 8.855 ms/block
+p95: 13.043 ms/block
+p99: 15.300 ms/block
+Budget: 21.333 ms/block
+Max sample peak: 0.5374
+
+REGRESSION GUARDS VS v31.3.0
+PASS — RealtimeDSP AST identical.
+PASS — MasterSafetyCompressor AST identical.
+PASS — SourceFidelityGuard AST identical.
+PASS — LookaheadPeakLimiter AST identical.
+PASS — driver/patch_joymetric_driver.py byte-identical.
+PASS — INSTALL_JOYMETRIC_DRIVER.ps1 byte-identical.
+PASS — SETUP_AND_START.ps1 byte-identical.
+PASS — device_scan_worker.py byte-identical.
+
+HARDWARE BOUNDARY
+The packaging environment cannot execute Windows WASAPI / Spotify routing. The stable route/driver stack is unchanged intentionally; the user's Windows machine remains the final live listening/integration validation.

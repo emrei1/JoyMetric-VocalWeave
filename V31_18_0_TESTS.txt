@@ -1,0 +1,39 @@
+JoyMetric v31.18.0 - GrooveTruth Validation
+===========================================
+
+STATIC
+PASS  py_compile: agentic_live_dj.py / realtime_native_engine.py / beat_clock.py
+
+LIVE FIELD MEASUREMENTS (v31.17 session, delay-compensated 40 s capture, D=15.837 s)
+      record own low transients on any 16th grid: 31-42 % (chance 36 %)
+      added low hits on the record grid: 30-35 % (chance) / added hats 42-56 %
+      tempo estimates on one record: 129.9 / 135.3 / 139.97 / 141.1 BPM
+      added hats -7.4 dB vs record hats / added low hits -3.6 dB vs record kicks
+
+GROOVETRUTH SUITE (21/21 PASS)
+PASS  clarity: synthetic club 0.87 / beat-less dreamy capture 0.00 / noise 0.00
+PASS  downbeat class correct for all 4 bar rotations
+PASS  source kick pattern peaks on the four beats (1.0/0.84/0.73/0.84), off-beats < 0.05
+PASS  source hat pattern on 8ths
+PASS  groove analysis cost 31.9 ms per 15 s window
+PASS  mixer grid follows the frame anchor exactly (0.00 milli-beats, frame lock)
+PASS  rendered hats on the anchored 16th grid: spread p90-median 0.7 ms
+PASS  clarity gate: beat-less material gets 0.8 % of the kick energy
+PASS  level matcher: quiet record -> layer gain 0.55 vs 2.50 on a loud record
+PASS  mixer status exposes groove_clarity / grid_frame_lock / lm gains
+PASS  agent analysis carries clarity / downbeat / source patterns (clarity 0.80)
+PASS  agent posts a frame anchor and groove clarity (0.95)
+PASS  frame anchor lands on a true downbeat (0.7 ms, beat index % 4 == 0)
+PASS  pattern from source picks FLOOR for a four-on-the-floor record
+PASS  e2e (30 s real time): mixer reached frame-anchored lock (656/705 blocks)
+PASS  e2e: added hats on the record true 16th grid, spread 0.1 ms
+PASS  e2e: mixer bar phase within 0.001 beats of the record true downbeats
+PASS  e2e: agent clarity 1.0 on the synthetic record / no agent error
+
+SEMANTIC WORKER (standalone, venv, port 8799)
+PASS  /health ready with commit_mb / inferences · /agent-state x3 through the single inference thread · /prompt-profile
+
+REGRESSION (Rust path active)
+PASS  BeatClock 14/14 / GridTruth agent 18/18
+PASS  v31.16 24/24 / v31.15 11/11 / v31.14 21/21 / v31.13 12/12 / v31.12 21/21 / v31.11 29/29 / v31.10 32/32
+TOTAL 203/203

@@ -1,0 +1,73 @@
+JoyMetric v31.1.0 — Realtime Agentic DJ / Spotify Prototype
+Final validation report
+Date: 2026-08-30
+
+SCOPE
+- Deck A = currently playing Spotify, routed through the existing JoyMetric Virtual Audio Driver.
+- Deck B = internal realtime Loop/Roll deck captured from Deck A history.
+- Multi-timescale observer = 1.5 s fast window + 15 s musical-context window.
+- Rolling musical-time planner = beat/bar/phrase-aware controller actions.
+- Normal DJ control surface = Deck A/B low-mid-high EQ, bipolar filter, gain, crossfader, loop/roll, beatjump, Spotify transport, reverb, echo.
+- Stem UI is explicitly analysis/activity only; no fake stem separation.
+- Existing v30.4.47 LowEndIntegrity/CrackleGuard master remains the final DSP stage.
+
+STATIC / SYNTAX
+PASS  python -W error::SyntaxWarning -m py_compile:
+      app.py
+      agentic_live_dj.py
+      realtime_native_engine.py
+      realtime_semantic_server.py
+PASS  node --check static/app.js
+PASS  all 35 Agentic DJ JavaScript $() element references resolve to HTML ids.
+PASS  required /api/agentic/* realtime endpoints exist.
+PASS  deprecated local-track prototype endpoints (/upload, /render, /play) are absent.
+PASS  old Load Track A / agentic_dj_engine path is absent, so the previous local-track crash path is removed.
+
+V30.4.47 AUDIO-QUALITY REGRESSION GUARDS
+PASS  RealtimeDSP AST identical to v30.4.47.
+PASS  MasterSafetyCompressor AST identical to v30.4.47.
+PASS  SourceFidelityGuard AST identical to v30.4.47.
+PASS  driver/patch_joymetric_driver.py byte-identical to v30.4.47.
+PASS  INSTALL_JOYMETRIC_DRIVER.ps1 byte-identical to v30.4.47.
+PASS  SETUP_AND_START.ps1 byte-identical to v30.4.47.
+Therefore the stable Spotify virtual-driver transport and LowEndIntegrity master were not replaced by this prototype.
+
+MUSICAL ANALYSIS
+Synthetic 15 s 120-BPM kick + 808 test:
+PASS  estimated BPM = 120.0 BPM.
+PASS  BPM confidence = 0.881–0.944 across repeated synthetic runs.
+PASS  160-point live waveform produced.
+PASS  low/mid/high activity, bass/drums/vocal/melody activity proxies, coarse key, energy and beat phase produced.
+15 s context analysis runtime in this Linux validation environment: ~82.5 ms in the final run.
+Analysis runs out-of-band, never in the realtime audio callback.
+
+REALTIME DJ MIXER + V30.4.47 MASTER STRESS
+Input: 48 kHz stereo, 1024-frame blocks, synthetic rhythmic kick + 808 + hats.
+Active: Deck A/B EQ, Deck A/B bipolar filters, 2-beat Loop Deck, crossfader 45%, existing RealtimeDSP master.
+PASS  finite output / no NaN / no Inf.
+PASS  Loop Deck captured exactly 48,000 frames at 120 BPM / 2 beats.
+PASS  mean processing = ~7.70 ms/block.
+PASS  p95 processing = ~11.36 ms/block.
+PASS  p99 processing = ~13.66 ms/block.
+      realtime block budget = 21.33 ms.
+PASS  final sample peak in this stress run = ~0.7254; existing v30.4.47 limiter/master remains downstream.
+
+CORRELATED LIVE + LOOP CROSSFADER SAFETY
+A normal equal-power center crossfade of two identical signals has gain = 1.414214 (+3.01 dB).
+JoyMetric correlation-aware normalization at corr=0.95 gives gain = 1.012739.
+PASS  correlated Loop Deck does not create the normal +3 dB center-crossfade pile-up before master limiting.
+PASS  loop seam uses a short 4 ms wrap crossfade to avoid hard loop clicks.
+
+THREADING / ARCHITECTURE
+PASS  agent analysis/planning is on a dedicated daemon thread.
+PASS  Spotify GSMTC media calls are outside the audio callback.
+PASS  no file decoding, network/model call, subprocess, or media-session command is added to the callback.
+PASS  realtime callback receives only bounded numeric controller targets and PCM.
+PASS  optional PyWinRT Windows Media Control dependency is installed by start.ps1 if available; failure is nonfatal to audio mixing.
+
+KNOWN PROTOTYPE LIMITS
+- Spotify does not expose future raw PCM to JoyMetric, so this live prototype cannot honestly provide arbitrary future-track hotcues or a true second independent Spotify deck.
+- Deck B is therefore a real internal Loop/Roll deck rather than a fake second Spotify deck.
+- Vocal/drums/bass/melody bars are activity estimates, not separated stems yet.
+- Coarse key/live structure inference is heuristic in this prototype; a production DJ analyzer should pre-analyze licensed/local tracks for exact phrase/cue maps.
+- Windows GSMTC support depends on Spotify exposing the requested transport command.

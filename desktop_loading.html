@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JoyMetric VocalWeave</title>
+<style>
+  html,body{margin:0;height:100%;background:#07090e;color:#eef1f7;font:14px/1.5 "Segoe UI",Inter,system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .wrap{text-align:center}
+  .mark{width:120px;border-radius:10px;margin:0 auto 22px;box-shadow:0 18px 46px rgba(126,108,255,.28)}
+  h1{font-size:17px;margin:0 0 8px;font-weight:700;letter-spacing:.01em}
+  p{margin:0;color:#8f99a8;font-size:12px}
+  .spin{width:26px;height:26px;margin:22px auto 0;border-radius:50%;
+    border:3px solid rgba(126,108,255,.18);border-top-color:#7e6cff;animation:sp .9s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  #t{margin-top:10px;font-size:11px;color:#5f6a7b}
+  #err{display:none;margin-top:18px;font-size:11px;color:#c98}
+  #err a{color:#7e6cff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="mark" src="static/joymetric-logo.jpg" alt="JoyMetric">
+  <h1>Starting VocalWeave&hellip;</h1>
+  <p>Routing Spotify and loading the audio engine + GPU workers.</p>
+  <div class="spin"></div>
+  <div id="t"></div>
+  <div id="err">Taking longer than usual. <a href="http://127.0.0.1:8765/">Open directly</a> or check
+    <code>runtime\desktop_launch.log</code>.</div>
+</div>
+<script>
+  var BACKEND = "http://127.0.0.1:8765/";
+  var startedAt = Date.now();
+  var TIMEOUT_MS = 240000;
+  function tick(){
+    var elapsed = Math.round((Date.now() - startedAt) / 1000);
+    var t = document.getElementById('t');
+    if (t) t.textContent = elapsed + "s elapsed";
+    if (Date.now() - startedAt > TIMEOUT_MS) {
+      var e = document.getElementById('err');
+      if (e) e.style.display = 'block';
+      setTimeout(tick, 2000);
+      return;
+    }
+    fetch(BACKEND + "?_=" + Date.now(), { mode: "no-cors", cache: "no-store" })
+      .then(function () { window.location.href = BACKEND; })
+      .catch(function () { setTimeout(tick, 900); });
+  }
+  setTimeout(tick, 400);
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+JoyMetric v30.4.39 static regression tests
+
+PASS: installer syntax structure inspected after patch.
+PASS: Inf2Cat discovery accepts x64 OR x86 host tool independently of target architecture.
+PASS: SignTool discovery accepts x64 OR x86 host tool independently of target architecture.
+PASS: InfVerif discovery prefers x64, falls back to x86/other installed WDK copy.
+PASS: missing x64 ApiValidator no longer falsely classifies WDK as missing; development flow warns and continues.
+PASS: JoyMetric virtual-driver source patch unchanged from v30.4.38.
+PASS: realtime_native_engine.py unchanged from v30.4.38.
+PASS: driver/patch_joymetric_driver.py unchanged from v30.4.38.
+
+Windows live WDK/package/install still requires execution on the target Windows system.

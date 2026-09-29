@@ -1,0 +1,22 @@
+JoyMetric v30.4.38 WDK x64 Verification Fix — tests
+
+PASS: INSTALL_JOYMETRIC_DRIVER.ps1 parses as balanced PowerShell text checks.
+PASS: tool discovery now prefers newest versioned WDK x64 Inf2Cat and SignTool.
+PASS: tool discovery requires x64 InfVerif.
+PASS: tool discovery requires x64 ApiValidator + Aitstatic + ApiValidator DLL + x64 UniversalDDIs.xml + ModuleWhiteList.xml.
+PASS: MSBuild compile command preserves Release|x64 and SignMode=Off.
+PASS: only in-build SkipPackageVerification and ApiValidator tasks are bypassed.
+PASS: standalone x64 InfVerif /w is mandatory after compile.
+PASS: standalone x64 ApiValidator is mandatory after compile.
+PASS: catalog/signing use version-matched x64 Inf2Cat and SignTool.
+PASS: patch_joymetric_driver.py unchanged from v30.4.37 (encoding fix and JoyMetric PCM bridge preserved).
+PASS: realtime_native_engine.py unchanged from v30.4.37 (DSP/routing regression avoided).
+
+Root cause addressed:
+The user's v30.4.37 log showed that SimpleAudioSample.sys compiled/linked successfully, then WDK 10.0.28000.0 command-line verification failed trying to load x86\InfVerif.dll and x86 ApiValidator/Aitstatic (exit 193) while validating an x64 driver. v30.4.38 uses explicit x64 verifier tools.
+
+Not executable in this Linux artifact environment:
+- actual WDK 28000 x64 InfVerif/ApiValidator execution
+- Inf2Cat/signing/device installation
+- Windows render -> JoyMetric kernel ring -> capture live test
+These run on Windows and are logged to %LOCALAPPDATA%\JoyMetric\logs\driver-install-v30.4.38.log

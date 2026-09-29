@@ -1,0 +1,22 @@
+JoyMetric v31.8.0 — DJ Director V3 Validation
+================================================
+
+PASS — Python compile: app.py, agentic_live_dj.py, dj_director_v3.py, device_scan_worker.py, realtime_native_engine.py, realtime_semantic_server.py, processor.py
+PASS — JavaScript syntax: static/app.js
+PASS — Director produces 5 alternative choreographies for a synthetic future structural boundary.
+PASS — Selected rising-boundary example: TENSION -> FILTER_SWEEP -> ROLL_ACCEL -> DROP.
+PASS — Performance-memory regression: after repeated use of the first family set, replanning selected ECHO_HALF -> GROOVE_LIFT -> DRUM_FILL -> PUNCH_IN rather than repeating the same chain.
+PASS — 18 parameterized gesture families expose continuous depth/duration/send/feedback/width/duck/loop/impact parameters.
+PASS — Parameterized gesture execution creates control-rate automation lanes.
+PASS — One primary event per beat retained.
+PASS — CLAP action is advisory support; it cannot replace a coherent multi-beat choreography on its own.
+PASS — realtime_native_engine.py SHA256 identical to v31.7.0:
+       a8889ac33e5f8e58ee14af87531592b19f1b2cc583b81a343cd7f249f8d38a24
+PASS — Synthetic RealtimeDJMixer test, 48 kHz stereo / 2048 frames / 220 blocks:
+       mean ~1.34 ms, p95 ~2.14 ms, p99 ~2.89 ms, max ~6.45 ms
+       realtime block budget = 42.67 ms
+       finite PCM / no NaN / no Inf
+
+VALIDATION BOUNDARY
+-------------------
+The packaging environment is Linux and cannot run the Windows Spotify virtual-driver/WASAPI route. The native audio engine is intentionally unchanged from the user's v31.7 continuity build; the first Windows run remains the final hardware/audio validation.

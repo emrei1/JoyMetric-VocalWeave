@@ -1,0 +1,23 @@
+JoyMetric v30.4.37 Driver Encoding Fix — tests
+
+PASS: patch_joymetric_driver.py Python compile.
+PASS: UTF-16 BOM SimpleAudioSample.inx fixture patched successfully.
+PASS: original UTF-16 BOM (FF FE) preserved after patch/write.
+PASS: ROOT\JoyMetricVirtualAudio inserted.
+PASS: JoyMetric Virtual Input inserted.
+PASS: JoyMetric Internal Capture inserted.
+PASS: DriverVer 0.1.0.0 inserted.
+PASS: 48 kHz stereo signed PCM32 bridge verification tokens present.
+PASS: installer marker bumped to .joymetric_patched_v30437, so the failed v30.4.36 derivative build is discarded and recopied from the untouched Microsoft source cache.
+PASS: v30.4.36-installed Visual Studio / SDK / WDK discovery path is retained, so the one-time toolchain should be reused.
+
+Root cause fixed:
+Microsoft SimpleAudioSample.inx can be BOM-marked UTF-16. v30.4.36 forced utf-8-sig and crashed on byte FF FE before MSBuild. v30.4.37 detects UTF-16, UTF-8 BOM, or UTF-8 per source file and preserves the original encoding on write.
+
+Not executable in this Linux artifact environment:
+- WDK/MSBuild kernel-driver compile
+- Inf2Cat/signing
+- DevCon enumeration/install
+- real Windows render -> capture PCM verification
+Those stages run on the user's Windows machine and are logged to:
+%LOCALAPPDATA%\JoyMetric\logs\driver-install-v30.4.37.log

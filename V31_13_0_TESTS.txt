@@ -1,0 +1,41 @@
+JoyMetric v31.13.0 — GridLock Validation
+========================================
+
+STATIC
+PASS  py_compile: app.py · agentic_live_dj.py · dj_director_v3.py
+      realtime_native_engine.py · musical_intelligence.py
+PASS  node --check static/app.js
+
+GRIDLOCK SUITE (12/12 PASS — deterministic clock hook grid_now_t)
+
+BEAT-PHASE LOCK (the hi-hat misalignment fix)
+PASS  hat accents land on the ANCHOR's beats     beat/off16 energy ratio 5.74
+PASS  hats do NOT follow the old engine-start grid (naive ratio 3.72 < 5.74)
+PASS  stable under +-0.6 BPM per-block re-estimate jitter (ratio 6.04)
+PASS  output finite
+
+CONFIDENCE GATING (unsure tracker => quiet grid, never confidently wrong)
+PASS  hats muted at low confidence   rms conf.95=1.7e-4 vs conf.05=3e-5 (5.7x)
+PASS  redrum eased at low confidence effective 0.795 -> 0.325
+
+REDRUM / PUMP ON THE LOCKED GRID
+PASS  kicks land on the anchor's beats (low-band ratio 2.51)
+PASS  pump duck lands exactly on the locked beat (0.050 vs 0.096 recovered)
+
+SWING
+PASS  odd 16ths delayed by the swing amount (pre-onset 0.000000 vs post 0.000080)
+
+COMPATIBILITY
+PASS  neutral-controls output sample-identical to legacy controls
+PASS  unlocked/manual mode keeps legacy free-running hats
+PASS  agent posts grid_anchor_t + bpm_confidence + swing to the engine
+
+REGRESSION
+PASS  FullRemix suite   21/21
+PASS  StageCraft suite  29/29
+PASS  v31.10 suite      32/32
+TOTAL 94/94
+
+VALIDATION BOUNDARY
+Final groove feel over the real Spotify -> WASAPI route needs ears on the
+target machine.

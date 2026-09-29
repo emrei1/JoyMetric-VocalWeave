@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07090e" id="themeColorMeta">
+  <title>JoyMetric Studio</title>
+  <script>try{let t=localStorage.getItem("joymetric-color-theme")||"original";if(t==="graphite")t="original";if(!["original","sand","night","metal","green","live","crimson","teal","royal","sunset","arctic","neon","emerald","amber","slate","vapor"].includes(t))t="original";document.documentElement.dataset.theme=t}catch(_){document.documentElement.dataset.theme="original"}</script>
+  <link rel="stylesheet" href="/static/app.css?v=31-30-31">
+</head>
+<body>
+<div class="studio-shell">
+  <canvas id="spectrumWaterCanvas" class="spectrum-water-canvas" aria-hidden="true"></canvas>
+  <aside class="sidebar" id="homeSection">
+    <div class="logo-panel">
+      <img src="/static/joymetric-logo.jpg" alt="JoyMetric" class="logo-image">
+    </div>
+
+    <nav class="side-nav" aria-label="Main navigation">
+      <button class="nav-item active" data-nav="home" type="button">
+        <span class="nav-icon">◆</span><span>Home</span>
+      </button>
+      <button class="nav-item agentic-nav-item" data-nav="agentic" type="button">
+        <span class="nav-icon">⟲</span><span>Realtime Weave</span><span class="agentic-nav-badge">LIVE</span>
+      </button>
+      <button class="nav-item" data-library="history" type="button">
+        <span class="nav-icon">◷</span><span>History</span><span class="nav-count" data-count-for="history">0</span>
+      </button>
+    </nav>
+
+    <div class="nav-divider"></div>
+    <div class="nav-label">LIBRARY</div>
+    <div class="library-links">
+      <button class="nav-item" data-library="projects" type="button"><span class="nav-icon">▣</span><span>My Projects</span><span class="nav-count" data-count-for="projects">0</span></button>
+      <button class="nav-item" data-library="audio" type="button"><span class="nav-icon">▤</span><span>My Audio</span><span class="nav-count" data-count-for="audio">0</span></button>
+      <button class="nav-item" data-library="favorites" type="button"><span class="nav-icon">☆</span><span>Favorites</span><span class="nav-count" data-count-for="favorites">0</span></button>
+    </div>
+
+    <div class="nav-divider"></div>
+    <div class="nav-label">TOOLS</div>
+    <div class="library-links">
+      <button class="nav-item" data-library="references" type="button"><span class="nav-icon">▥</span><span>Reference Library</span><span class="nav-count" data-count-for="references">0</span></button>
+      <button class="nav-item" data-nav="settings" type="button"><span class="nav-icon">⚙</span><span>Settings</span></button>
+    </div>
+
+    <div class="engine-card">
+      <div class="engine-glyph"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="engine-copy"><span>Local Engine</span><strong id="sideEngineText">Starting…</strong></div>
+      <span class="engine-dot" id="sideEngineDot"></span>
+    </div>
+  </aside>
+
+  <main class="main-stage">
+    <header class="topbar">
+      <div class="project-title-wrap">
+        <div class="project-title-line">
+          <input id="projectTitle" class="project-title-input" type="text" value="Untitled Track" maxlength="160" spellcheck="false" aria-label="Track name">
+          <button class="tiny-icon project-title-edit" id="projectTitleEditBtn" type="button" title="Edit track name" aria-label="Edit track name">✎</button>
+        </div>
+        <div class="project-meta"><span id="projectFormat">No file selected</span><i></i><span id="projectDuration">--:--</span></div>
+      </div>
+      <div class="top-actions">
+        <button class="top-action" type="button" id="saveLibraryBtn" disabled><span>＋</span> Save</button>
+        <button class="top-action" type="button" id="exportBtn" disabled><span>⇧</span> Export</button>
+        <button class="top-action" type="button" id="topHistoryBtn"><span>◷</span> History</button>
+        <div class="color-picker-wrap" id="colorPickerWrap">
+          <button class="top-action color-theme-button" type="button" id="colorThemeBtn" aria-haspopup="menu" aria-expanded="false"><span class="color-button-swatch" id="colorButtonSwatch"></span> Color <span class="color-chevron">⌄</span></button>
+          <div class="color-theme-menu hidden" id="colorThemeMenu" role="menu" aria-label="Color theme">
+            <button type="button" class="color-theme-option" data-theme-choice="original" role="menuitem"><span class="theme-preview original-preview"><i></i><i></i><i></i></span><span><strong>Original Color</strong><small>Blue · violet · red</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="sand" role="menuitem"><span class="theme-preview sand-preview"><i></i><i></i><i></i></span><span><strong>Sand Gold</strong><small>Beige · brass · espresso</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="night" role="menuitem"><span class="theme-preview night-preview"><i></i><i></i><i></i></span><span><strong>Night Gold</strong><small>Charcoal · amber · bronze</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="metal" role="menuitem"><span class="theme-preview metal-preview"><i></i><i></i><i></i></span><span><strong>Blue Metal</strong><small>Steel · navy · ice blue</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="green" role="menuitem"><span class="theme-preview green-preview"><i></i><i></i><i></i></span><span><strong>Matte Green</strong><small>Forest · sage · olive</small></span><b>✓</b></button>
+<!-- v31.30.29 canonical accent: 10 more themes -->
+            <button type="button" class="color-theme-option" data-theme-choice="crimson" role="menuitem"><span class="theme-preview crimson-preview"><i></i><i></i><i></i></span><span><strong>Crimson Noir</strong><small>Black · crimson · coral</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="teal" role="menuitem"><span class="theme-preview teal-preview"><i></i><i></i><i></i></span><span><strong>Cyber Teal</strong><small>Ink · aqua · cyan</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="royal" role="menuitem"><span class="theme-preview royal-preview"><i></i><i></i><i></i></span><span><strong>Royal Violet</strong><small>Indigo · violet · lilac</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="sunset" role="menuitem"><span class="theme-preview sunset-preview"><i></i><i></i><i></i></span><span><strong>Sunset</strong><small>Ember · orange · rose</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="arctic" role="menuitem"><span class="theme-preview arctic-preview"><i></i><i></i><i></i></span><span><strong>Arctic Ice</strong><small>Slate · ice · sky</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="neon" role="menuitem"><span class="theme-preview neon-preview"><i></i><i></i><i></i></span><span><strong>Neon Pink</strong><small>Noir · magenta · pink</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="emerald" role="menuitem"><span class="theme-preview emerald-preview"><i></i><i></i><i></i></span><span><strong>Emerald</strong><small>Pine · emerald · mint</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="amber" role="menuitem"><span class="theme-preview amber-preview"><i></i><i></i><i></i></span><span><strong>Amber Glow</strong><small>Char · amber · honey</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="slate" role="menuitem"><span class="theme-preview slate-preview"><i></i><i></i><i></i></span><span><strong>Steel Slate</strong><small>Graphite · steel · mist</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option" data-theme-choice="vapor" role="menuitem"><span class="theme-preview vapor-preview"><i></i><i></i><i></i></span><span><strong>Vaporwave</strong><small>Violet · pink · cyan</small></span><b>✓</b></button>
+            <button type="button" class="color-theme-option live-theme-option" data-theme-choice="live" role="menuitem"><span class="theme-preview live-preview"><i></i><i></i><i></i></span><span><strong>Spectrum Flow</strong><small>Live · frequency-reactive</small></span><em class="live-theme-badge">LIVE</em><b>✓</b></button>
+          </div>
+        </div>
+        <button class="top-action icon-only" type="button" id="settingsBtn" title="Advanced settings">⚙</button>
+        <div class="window-dots"><i></i><i></i><i class="close-dot"></i></div>
+      </div>
+    </header>
+
+    <section class="library-view hidden" id="libraryView">
+      <div class="library-view-head">
+        <div>
+          <span class="section-kicker" id="libraryKicker">LIBRARY</span>
+          <h1 id="libraryTitle">My Audio</h1>
+          <p id="librarySubtitle">Saved JoyMetric renders live here on this computer.</p>
+        </div>
+        <div class="library-head-actions">
+          <input id="referenceUploadInput" class="hidden" type="file" accept="audio/*,.mp3,.wav,.flac,.m4a,.aac,.ogg,.webm">
+          <button class="top-action reference-upload-action hidden" id="referenceUploadBtn" type="button">＋ Upload Reference</button>
+          <button class="top-action" id="libraryBackBtn" type="button">← Back to Editor</button>
+          <button class="top-action" id="libraryRefreshBtn" type="button">↻ Refresh</button>
+        </div>
+      </div>
+      <div class="library-grid" id="libraryGrid"></div>
+      <div class="library-empty hidden" id="libraryEmpty">
+        <span class="library-empty-icon">♪</span>
+        <strong id="libraryEmptyTitle">Nothing here yet</strong>
+        <p id="libraryEmptyText">Process a track and save it to this section.</p>
+      </div>
+    </section>
+
+    <section class="agentic-view hidden" id="agenticView">
+      <div class="agentic-head">
+        <div>
+          <h1>VocalWeave</h1>
+        </div>
+        <div class="agentic-head-actions">
+          <span class="agentic-pill"><i></i>SPOTIFY LIVE · 48s LOOKAHEAD</span>
+          <button class="top-action" id="agenticBackBtn" type="button">← Back</button>
+        </div>
+      </div>
+
+      <section class="agentic-console agentic-performance-console">
+        <div class="agentic-console-kicker">AGENT PERFORMANCE</div>
+        <div class="agentic-performance-grid">
+          <label class="agentic-performance-prompt"><span>PROMPT</span><textarea id="agenticPrompt" maxlength="1200" rows="3">dark modern hip-hop DJ, keep the 808 clean, phrase-aware changes, restrained FX, musical loop/roll gestures, raise energy without crushing transients</textarea></label>
+          <label><span>AUTONOMY</span><select id="agenticAutonomy"><option value="autopilot">AUTOPILOT</option><option value="copilot">COPILOT</option><option value="manual">MANUAL</option></select></label>
+          <label><span>STABLE TEMP <b id="agenticWeaveNoiseValue">0.52</b> <i id="agenticWeavePlaying" style="opacity:.7;font-style:normal"></i></span><input id="agenticWeaveNoise" type="range" min="20" max="70" value="52" title="Stable Audio init noise for the woven instrumental - live; the change is heard at the next 8 s hop"></label>
+          <label><span>STABLE FX <b id="agenticWeaveCfgValue">4.0</b></span><input id="agenticWeaveCfg" type="range" min="20" max="70" value="40" title="Prompt guidance (cfg) for the woven instrumental - 1.0 = no prompt effect; live"></label>
+          <label><span>PHYSICAL AUDIO OUT</span><select id="agenticOutput"><option value="">Scanning outputs…</option></select></label>
+        </div>
+        <div class="agentic-prompt-chips">
+          <button type="button" data-agentic-prompt="dark modern hip-hop DJ, keep the 808 clean, phrase-aware changes, restrained FX, musical loop/roll gestures">HIP-HOP CLEAN</button>
+          <button type="button" data-agentic-prompt="smooth professional club DJ, long musical phrases, subtle EQ movement, clean low end, very restrained FX">SMOOTH CLUB</button>
+          <button type="button" data-agentic-prompt="dreamy hypnotic late-night DJ, floating width and space, musical loops, preserve transients and bass">DREAMY</button>
+          <button type="button" data-agentic-prompt="aggressive performance DJ, fast phrase-aware cuts and rolls, strong energy, protect kick and sub">HARD</button>
+          <button type="button" data-agentic-prompt="drum n bass like speed and drums a banger, smooth professional genre morph, strong drums, clean low end, prominent professional sound fx, strong riser, reverse swell, snare rush and cinematic impact into the drop">DNB MORPH</button>
+        </div>
+        <div class="agentic-live-actions">
+          <button class="agentic-primary" id="agenticLetsGoBtn" type="button"><strong>LET'S GO</strong><small>route Spotify, analyze 15 s future PCM, then start the delayed professional performance</small></button>
+          <button id="agenticStopBtn" type="button"><strong>■ STOP</strong><small>restore Spotify route</small></button>
+        </div>
+        <div class="agentic-progress"><i id="agenticProgressBar"></i></div>
+        <p id="agenticStatus">Start Spotify playback, choose Audio Out, then press LET'S GO.</p>
+      </section>
+
+
+    </section>
+
+
+
+    <div class="work-area" id="workArea">
+      <section class="control-column" id="editorSection">
+        <article class="control-card upload-card">
+          <div class="source-mode-tabs" role="tablist" aria-label="Source input">
+            <button class="source-mode active" type="button" data-source-mode="file">File</button>
+            <button class="source-mode" type="button" data-source-mode="reference">Reference Library</button>
+            <button class="source-mode" type="button" data-source-mode="mic">Microphone</button>
+          </div>
+
+          <div class="source-panel" data-source-panel="file">
+            <label class="dropzone" id="dropzone">
+              <input id="audioFile" type="file" accept="audio/*,.mp3,.wav,.flac,.m4a,.aac,.ogg,.webm">
+              <span class="upload-cloud">☁</span>
+              <strong id="fileLabel">Upload audio or drop a file here</strong>
+              <small>WAV, MP3, FLAC, M4A, AAC, OGG · up to 2 GB</small>
+              <span class="browse-button">Browse Files</span>
+            </label>
+          </div>
+
+          <div class="source-panel hidden" data-source-panel="reference">
+            <div class="reference-picker">
+              <div class="reference-picker-icon">▥</div>
+              <div class="reference-picker-copy">
+                <strong>Choose a reference track</strong>
+                <small>Use any song stored in your persistent Reference Library.</small>
+              </div>
+              <select id="referenceSourceSelect"><option value="">Loading references…</option></select>
+              <div class="reference-selected-note" id="referenceSelectedNote">No reference selected.</div>
+            </div>
+          </div>
+
+          <div class="source-panel hidden" data-source-panel="mic">
+            <div class="mic-recorder mic-studio">
+              <div class="mic-studio-head">
+                <div class="mic-orb" id="micOrb">●</div>
+                <div class="mic-copy"><strong>Voice + backing melody</strong><small>Upload a melody, record your microphone over it, then JoyMetric combines both in a clean float mix before the AI edit pipeline. Headphones are recommended while recording.</small></div>
+              </div>
+
+              <div class="mic-backing-card" id="micBackingCard">
+                <div class="mic-backing-top">
+                  <div><span class="mic-backing-kicker">BACKING MELODY</span><strong id="micBackingName">No melody loaded</strong><small id="micBackingMeta">WAV, FLAC, MP3, M4A, AAC, OGG or WebM</small></div>
+                  <div class="mic-backing-actions">
+                    <input id="micBackingInput" class="hidden" type="file" accept="audio/*,.mp3,.wav,.flac,.m4a,.aac,.ogg,.webm">
+                    <button class="secondary-button mic-backing-upload" type="button" id="micBackingBrowseBtn">＋ Choose melody</button>
+                    <button class="secondary-button" type="button" id="micBackingClearBtn" disabled>Clear</button>
+                  </div>
+                </div>
+                <audio id="micBackingPreview" class="mic-backing-preview hidden" controls preload="metadata"></audio>
+                <div class="mic-mix-controls">
+                  <label><span><strong>Voice</strong><b id="micVoiceGainValue">0.0 dB</b></span><input id="micVoiceGain" type="range" min="-12" max="6" step="0.5" value="0"></label>
+                  <label><span><strong>Melody</strong><b id="micBackingGainValue">-8.0 dB</b></span><input id="micBackingGain" type="range" min="-24" max="6" step="0.5" value="-8"></label>
+                </div>
+                <div class="mic-backing-options">
+                  <label><input id="micBackingMonitor" type="checkbox" checked><span>Play melody while recording</span></label>
+                  <label><input id="micBackingLoop" type="checkbox" checked><span>Loop melody if recording is longer</span></label>
+                </div>
+              </div>
+
+              <div class="mic-record-zone">
+                <div class="mic-actions">
+                  <button class="record-button" type="button" id="micRecordBtn">● Record</button>
+                  <button class="secondary-button" type="button" id="micStopBtn" disabled>■ Stop</button>
+                  <button class="secondary-button" type="button" id="micClearBtn" disabled>Clear recording</button>
+                </div>
+                <div class="mic-status" id="micStatus">Microphone idle · backing melody is optional.</div>
+                <div class="mic-ai-ready hidden" id="micAiReady"><span>AI SOURCE</span><strong>Voice + melody ready</strong><small>The server will build one clean 44.1 kHz stereo source with anti-clip headroom before separation and AI processing.</small></div>
+                <audio id="micPreview" class="mic-preview hidden" controls preload="metadata"></audio>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="control-card prompt-card">
+          <div class="card-heading compact-heading">
+            <div><strong>Semantic Edit Prompt</strong><span class="info-dot">i</span></div>
+            <button class="mini-select" type="button" id="examplesBtn">Examples⌄</button>
+          </div>
+          <textarea id="prompt" placeholder="Describe the changes you want to make…">Dreamy atmospheric hip-hop with ethereal nocturnal textures, lush shimmering ambience, spacious depth, immersive stereo width and gentle reverberant tails.</textarea>
+          <div class="prompt-chips" id="promptChips">
+            <button type="button" data-prompt="Make the sound brighter and more open while preserving the original musical structure.">Brighter</button>
+            <button type="button" data-prompt="Add warm analog character and richer low-mid body while preserving the original musical structure.">Add Warmth</button>
+            <button type="button" data-prompt="Add more punch, impact and definition while preserving the original timing and musical structure.">More Punch</button>
+            <button type="button" data-prompt="Reduce reverberation and make the mix drier and more direct while preserving the original musical structure.">Reduce Reverb</button>
+          </div>
+
+          <details class="advanced" id="advancedOptions">
+            <summary>Advanced Options <span>⌄</span></summary>
+            <div class="advanced-body">
+              <div class="control-grid">
+                <div class="slider-card vocal-accent">
+                  <div class="slider-head"><span>Vocal edit</span><b id="vocalNoiseValue">0.10</b></div>
+                  <input id="vocalNoise" type="range" min="0" max=".5" step=".01" value=".10">
+                  <small>Only used when vocal editing is enabled.</small>
+                </div>
+                <div class="slider-card instrument-accent">
+                  <div class="slider-head"><span>Main edit strength</span><b id="instNoiseValue">0.65</b></div>
+                  <input id="instNoise" type="range" min="0" max="1" step=".01" value=".65">
+                  <small>Higher values create a stronger transformation.</small>
+                </div>
+              </div>
+              <div class="settings-grid">
+                <label class="field"><span>Backend</span><select id="backend"><option value="auto">Auto · hardware aware</option><option value="gpu">Accelerated</option><option value="cpu">Compatibility</option></select></label>
+                <label class="field"><span>Quality</span><select id="speedMode"><option value="turbo" selected>Turbo · 4 steps</option><option value="balanced">Balanced · 6 steps</option><option value="quality">Quality · 8 steps</option></select></label>
+                <label class="field"><span>Seed</span><input id="seed" type="number" value="1337"></label>
+              </div>
+              <label class="switch-row">
+                <input id="editVocals" type="checkbox">
+                <span class="switch"></span>
+                <span><strong>Edit the vocal stem too</strong><small>Leave off to preserve lyrics and vocal identity.</small></span>
+              </label>
+            </div>
+          </details>
+
+          <button class="primary" id="processBtn" type="button"><span>✦</span><strong>Generate Modified Audio</strong></button>
+        </article>
+
+        <article class="control-card progress-card" id="progressPanel">
+          <div class="card-heading"><strong>Processing</strong><span id="progressStatus">Ready</span></div>
+          <div class="progress-layout">
+            <div class="progress-ring" id="progressRing"><div><strong id="progressPct">0%</strong><span>complete</span></div></div>
+            <div class="progress-steps">
+              <strong id="stageText">Ready for a track</strong>
+              <p id="messageText">Choose a source and describe the change you want.</p>
+              <ul>
+                <li id="stepAnalyze"><i></i><span>Analyze audio</span></li>
+                <li id="stepSeparate"><i></i><span>Prepare layers</span></li>
+                <li id="stepTransform"><i></i><span>Apply changes</span></li>
+                <li id="stepRender"><i></i><span>Render output</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="progress-track"><div id="progressBar"></div></div>
+        </article>
+
+        <div class="tip-line"><span>💡</span><p>Tip: specific, sensory descriptions usually give you more intentional results.</p></div>
+      </section>
+
+      <section class="audio-workspace" id="compareSection">
+        <div class="workspace-toolbar compact-workspace-toolbar">
+          <div class="workspace-mode-row">
+            <button class="workspace-tab stem-tab" type="button" data-tab="stems" aria-pressed="false"><span class="tab-glyph">⌘</span> Stem View</button>
+          </div>
+        </div>
+
+        <section class="workspace-pane master-pane" id="masterPane">
+          <article class="audio-card original-card" id="originalCard">
+            <div class="audio-card-head">
+              <div class="audio-title-block"><span>ORIGINAL</span><small>SOURCE TRACK</small></div>
+              <div class="audio-meta"><span>44.1 kHz</span><i></i><span>Stereo</span><i></i><span id="originalMetaDuration">--:--</span></div>
+            </div>
+            <div class="audio-visual-row">
+              <button class="round-play blue-play" type="button" data-play="original">▶</button>
+              <div class="visual-stack">
+                <div class="wave-area"><canvas id="originalWave" class="wave-canvas" data-tone="original"></canvas><div class="playhead-line" id="originalPlayhead"></div></div>
+                <div class="spectrum-area"><canvas id="originalSpectrum" class="spectrum-canvas" data-tone="original"></canvas><div class="freq-axis"><span>20k</span><span>5k</span><span>1k</span><span>200</span></div><div class="time-axis" id="originalTimeAxis"></div></div>
+              </div>
+              <aside class="level-meter">
+                <strong id="originalPeak">—</strong><span>PEAK</span>
+                <div class="meter-body"><div class="meter-fill original-meter" id="originalMeter"></div></div>
+                <small>0<br>-12<br>-24<br>-36</small>
+              </aside>
+            </div>
+            <audio id="originalPlayer" preload="auto"></audio>
+          </article>
+
+          <article class="audio-card modified-card" id="modifiedCard">
+            <div class="audio-card-head">
+              <div class="audio-title-block"><span>MODIFIED</span><small>TRANSFORMED OUTPUT</small></div>
+              <div class="audio-meta"><span>44.1 kHz</span><i></i><span>Stereo</span><i></i><span id="modifiedMetaDuration">--:--</span></div>
+            </div>
+            <div class="audio-visual-row">
+              <button class="round-play violet-play" type="button" data-play="modified">▶</button>
+              <div class="visual-stack">
+                <div class="wave-area"><canvas id="modifiedWave" class="wave-canvas" data-tone="modified"></canvas><div class="playhead-line" id="modifiedPlayhead"></div></div>
+                <div class="spectrum-area"><canvas id="modifiedSpectrum" class="spectrum-canvas" data-tone="modified"></canvas><div class="freq-axis"><span>20k</span><span>5k</span><span>1k</span><span>200</span></div><div class="time-axis" id="modifiedTimeAxis"></div></div>
+              </div>
+              <aside class="level-meter">
+                <strong id="modifiedPeak">—</strong><span>PEAK</span>
+                <div class="meter-body"><div class="meter-fill modified-meter" id="modifiedMeter"></div></div>
+                <small>0<br>-12<br>-24<br>-36</small>
+              </aside>
+            </div>
+            <audio id="modifiedPlayer" preload="auto"></audio>
+          </article>
+
+          <section class="compare-strip" id="listenCompare">
+            <div class="compare-left"><strong>LISTEN & COMPARE</strong><div class="compare-buttons"><button type="button" class="compare-choice active" data-source="original">Original</button><button type="button" class="compare-choice" data-source="modified">Modified</button><button type="button" class="compare-choice" id="abButton">A ↔ B</button></div></div>
+            <div class="compare-right"><span>Volume</span><span class="speaker">◖</span><input id="compareVolume" type="range" min="0" max="1" step=".01" value=".85"></div>
+          </section>
+        </section>
+
+        <section class="workspace-pane stem-pane hidden" id="stemPane">
+          <div class="stem-pane-head"><div><span class="section-kicker">STEM VIEW</span><h2>Vocals + Instruments</h2><p>Inspect the layers used to rebuild the transformed result.</p></div><button class="back-compare" type="button" data-tab="original">Back to Compare</button></div>
+
+          <article class="stem-card vocal-stem-card">
+            <div class="stem-card-head"><div><span class="stem-badge vocal">V</span><div><strong id="vocalStemTitle">Vocals</strong><small id="vocalStemSubtitle">Protected vocal layer</small></div></div><button class="round-play small-play vocal-play" type="button" data-play="vocal">▶</button></div>
+            <div class="stem-visual"><div class="wave-area"><canvas id="vocalWave" class="wave-canvas" data-tone="vocal"></canvas></div><div class="spectrum-area"><canvas id="vocalSpectrum" class="spectrum-canvas" data-tone="vocal"></canvas></div></div>
+            <audio id="vocalStemPlayer" preload="auto"></audio>
+          </article>
+
+          <article class="stem-card instrument-stem-card">
+            <div class="stem-card-head"><div><span class="stem-badge instrument">I</span><div><strong>Instruments</strong><small>Edited instrumental layer</small></div></div><button class="round-play small-play instrument-play" type="button" data-play="instrument">▶</button></div>
+            <div class="stem-visual"><div class="wave-area"><canvas id="instrumentWave" class="wave-canvas" data-tone="instrument"></canvas></div><div class="spectrum-area"><canvas id="instrumentSpectrum" class="spectrum-canvas" data-tone="instrument"></canvas></div></div>
+            <audio id="instrumentStemPlayer" preload="auto"></audio>
+          </article>
+
+          <details class="source-stem-details">
+            <summary>Source stem players</summary>
+            <div class="source-stems">
+              <label><span>Protected vocals</span><audio id="protectedVocals" controls preload="none"></audio></label>
+              <label><span>Original instrumental</span><audio id="originalInstrumental" controls preload="none"></audio></label>
+              <label id="editedVocalsWrap" class="hidden"><span>Edited vocals</span><audio id="editedVocals" controls preload="none"></audio></label>
+            </div>
+          </details>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <footer class="bottom-transport">
+    <div class="transport-track-info">
+      <div class="frequency-cover-shell transport-cover-shell" id="transportCoverShell"><canvas id="transportCover" class="frequency-cover" aria-label="Audio color cover"></canvas><span class="frequency-cover-mark">JM</span></div>
+      <div><strong id="transportTitle">Untitled Track</strong><span id="transportMeta">No source loaded</span></div>
+    </div>
+    <div class="transport-controls">
+      <button type="button" class="transport-icon" id="prevBtn">│◀</button>
+      <button type="button" class="transport-play" id="transportPlay">▶</button>
+      <button type="button" class="transport-icon" id="nextBtn">▶│</button>
+    </div>
+    <div class="transport-timeline">
+      <span id="transportTime">0:00 / 0:00</span>
+      <input id="transportSeek" type="range" min="0" max="1000" value="0">
+    </div>
+    <div class="transport-volume"><span>◖</span><input id="transportVolume" type="range" min="0" max="1" step=".01" value=".85"></div>
+    <audio id="libraryPlayer" preload="auto"></audio>
+  </footer>
+</div>
+
+  <div class="modal-backdrop hidden" id="saveModal" role="dialog" aria-modal="true" aria-labelledby="saveModalTitle">
+    <div class="save-modal-card">
+      <div class="save-modal-head">
+        <div><span class="section-kicker">SAVE RESULT</span><h2 id="saveModalTitle">Add this render to your library</h2><p>Saved items remain on this computer even when you replace the app build.</p></div>
+        <button class="modal-close" id="saveModalClose" type="button">×</button>
+      </div>
+      <div class="save-asset-choice">
+        <span>Audio version</span>
+        <label><input type="checkbox" name="saveAssetKind" value="modified" checked> Modified</label>
+        <label><input type="checkbox" name="saveAssetKind" value="original"> Original</label>
+        <small>Select one or both. Projects always save the full working set.</small>
+      </div>
+      <div class="save-destinations" id="saveDestinations">
+        <label class="save-destination selectable" data-save-collection="projects"><input class="save-destination-check" type="checkbox" value="projects"><span class="save-checkmark">✓</span><span class="save-destination-icon">▣</span><div><strong>My Projects</strong><small>Save original, modified, stems and project metadata.</small></div></label>
+        <label class="save-destination selectable" data-save-collection="audio"><input class="save-destination-check" type="checkbox" value="audio"><span class="save-checkmark">✓</span><span class="save-destination-icon">▤</span><div><strong>My Audio</strong><small>Keep a reusable audio render in your local library.</small></div></label>
+        <label class="save-destination selectable" data-save-collection="favorites"><input class="save-destination-check" type="checkbox" value="favorites"><span class="save-checkmark">✓</span><span class="save-destination-icon">☆</span><div><strong>Favorites</strong><small>Pin this version to your favorite renders.</small></div></label>
+        <label class="save-destination selectable" data-save-collection="references"><input class="save-destination-check" type="checkbox" value="references"><span class="save-checkmark">✓</span><span class="save-destination-icon">▥</span><div><strong>Reference Library</strong><small>Store it as a sonic reference for later sessions.</small></div></label>
+      </div>
+      <div class="save-modal-footer">
+        <div class="save-modal-status" id="saveModalStatus">Select one or more destinations.</div>
+        <button class="save-selected-btn" id="saveSelectedBtn" type="button" disabled>Save selected <span id="saveSelectedCount">0</span></button>
+      </div>
+    </div>
+  </div>
+
+<script src="/static/app.js?v=31-30-31"></script>
+</body>
+</html>

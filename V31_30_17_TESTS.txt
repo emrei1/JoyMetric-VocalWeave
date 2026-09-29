@@ -1,0 +1,135 @@
+JoyMetric v31.30.17 VocalWeave Live FX - test results (2026-09-04, roformer_sep python, PYTHONIOENCODING=utf-8)
+
+validate_v31_28.py  64/64
+  sep worker (:8770): health; 4 s separated in 0.64 s
+  prompt = the Home tab's usage (agentic prompt + preservation suffix, Home negative, cfg 1.0)
+  engine: cancel deck before line duck / residual cap; read-only buffers accepted; failures counted; 40 s lookahead
+  weave tick: waits for the window AND its 1.5 s trailing context; cuts [W-1.5 s, 2W+1.5 s); busy hold; overtaken skip; disabled mark
+  cross-fade: raised-cosine ramps sum to exactly 1.000 over the overlap, zero slope at the ends
+  protected vocals: Stable Audio receives the instrumental only; noise 0.52 regardless of creativity, turbo 4 steps (user); amount 1.0 at any creativity; no inpainting on a first window;
+           inside the window the record's remainder equals the untouched vocal (1.5e-8)
+  CONTINUITY: the next window's input = previous output over [start-1 s, start+pad) as the KNOWN prefix (inpaint_keep_seconds) + the record
+           from the window start; one session seed; the scheduled clip is the continuation cut to the window
+  live overrides file (weave.json) sets noise / speed per window without a relaunch (restored after the test)
+  LIVE end to end on 16 s: scheduled in 5.7 s (sep 2.5 s, Stable Audio 3.0 s one-pass)
+
+Continuity measurement (measure_continuity.py; two consecutive 16 s windows of the record at 20-36 s and 36-52 s, noise 0.45, cfg 1.0, 6 steps)
+  originals: timbre (MFCC) distance between the two windows 21.9
+  v31.28.3 (new seed per window, no context):       shared 1.5 s: chroma sim 0.48, waveform corr 0.08, MFCC dist 51.5 | timbre distance A vs B 36.6
+  one seed + previous output as plain input context: shared 1.5 s: chroma sim 0.52, waveform corr 0.13, MFCC dist 43.5 | timbre distance A vs B 36.0
+  v31.29 inpaint continuation (known prefix 3 s):    shared 1.5 s: chroma sim 1.00, waveform corr 1.00, MFCC dist 13.2 | timbre distance A vs B 16.6
+  -> consecutive renders are now more alike than the original windows are; the seam is a continuation, not a new take
+  at noise 0.60 (user): known prefix 3 s: shared chroma 0.99 / waveform 0.99 / MFCC 6.4, timbre distance A vs B 36.8, harmony vs record 0.78;
+                        known prefix 6 s: 1.00 / 0.99 / 5.6, 50.2, 0.82;  9 s: 0.99 / 0.99 / 6.3, 52.5, 0.66  -> the prefix stays 3 s
+
+Regression battery: validate_v31_23.py 79/79, v31_24 14/14, v31_25 14/14, v31_26 17/17, v31_27 10/10 (v31.28.x runs), v31_28 35/35
+
+v31.29.2 additions
+  dj_off: agentic.json {"controller_scale": 0.0, "dj_off": true} -> amount keys scaled to 0 (lengths untouched), flag read live; block tick cancels planned takeovers,
+          empties the rack queue, keeps the weave running; flag off -> controls pass through unscaled
+  full-song continuity (Downloads FLAC, 64 s, 4 windows, noise 0.53, 4 steps; measure_continuity2.py):
+    16 s + 3 s prefix:    consecutive timbre distance renders 46.2 (min 19.4 max 71.9) vs originals 43.3 | seam chroma 1.00 corr 0.92 | harmony 0.92
+    16 s + 3 s + anchor:  46.8 vs 43.6 | 1.00 / 0.93 | 0.93
+    8 s + 3 s prefix:     31.2 vs 25.9 | 1.00 / 0.91 | 0.90
+  -> kept: 16 s windows, 3 s known prefix, no anchor
+
+v31.29.3 additions
+  seam-flat gain continuity: g_cont from the kept cross-fade region vs the previous levelled tail (25 % pull toward the RMS target)
+  two-hop continuation: a 6 s test window with 2 s hops -> 3 Stable Audio calls, each after 1.5 s of known output (ctx 1 s + pad 0.5 s), stitched full length, g_cont applied
+  controller at 40 % without drums / added instruments: a_filter 0.5 -> 0.2; drum_presence, fx_redrum, fx_stab, b_layer -> 0; loop_beats untouched; rack queue keeps only freeze rolls
+  live e2e (16 s, 2 hops, 4 steps): 11.8 s (sep 4.3 s, Stable Audio 4.9 s for both hops)
+  full-song continuity (64 s, noise 0.52, 4 steps; measure_continuity2.py, CTX env):
+    16 s windows, 3 s known prefix:  renders 45.2 vs originals 43.3 | seam chroma 1.00 corr 0.92 | harmony 0.93
+    8 s hops, 3 s known prefix:      30.0 vs 25.9 | 1.00 / 0.91 | 0.90
+    8 s hops, 8 s known prefix:      25.9 vs 26.1 | 1.00 / 0.92 | 0.90   <- shipped
+
+v31.30.0 additions (live temperature slider)
+  a scheduled window is remembered as pending (instrumental, start, rendered noise, clip seq)
+  set_noise clamps, persists to weave.json, flags a re-render; the pending window is re-rendered at the new noise, its old clip cancelled and a new
+  clip scheduled at the same frames; the flag clears when nothing is left; a window starting in < 9 s keeps its old render
+  API GET/POST /api/agentic/weave; UI slider STABLE TEMP (debounced POST, initial value fetched); agent set_weave_noise / rerender tick
+  live e2e (16 s, 2 hops, 4 steps, GPU shared with the live session): 18.7 s (sep 6.1 s, Stable Audio 12.3 s) - within the 24 s budget
+
+v31.30.1 additions (faster re-rendering)
+  hop clips: a 6 s test window with 2 s hops -> 3 clips; the first starts at the window buffer start (reconstructed cross-fade head), the last ends at its end,
+             they overlap only by the 100 ms blends
+  hop re-render: the EARLIEST pending hop is re-rendered first (one hop of work), old clip cancelled, new clip at the same frames; the following hops follow
+             one by one, each continuing the fresh one; a hop starting in < 4.5 s keeps its old render while later hops are still re-rendered
+  re-renders are serviced between the hops of a running window job; the model pads 1 s instead of 6 s per call (duration_padding_sec)
+  full-song timing (4 hops, noise 0.52, 4 steps): padding 6 s 23.7 s -> padding 1 s 11.5 s; continuity 16.1 vs the song's own 18.1, seam 1.00 / 0.91, harmony 0.90
+  live e2e (16 s, 2 hops, 4 steps): 4.8 s (sep 2.55 s, Stable Audio 2.07 s for both hops); level 0.99x; harmony vs the record 0.96
+
+v31.30.2 additions (crackles)
+  live measurement before the fix: xruns climbed in bursts of 2-4 exactly every 16 s at the window cut (42 -> 54 in 66 s), also with no weave job running
+  separation exchange is now raw float32 both ways (/separate_raw, stats in headers); 4 s round trip 1.9 s incl. worker time; no base64 / JSON in the app process
+  per-hop soft ceiling (tanh above 0.9); re-render thread at below-normal priority
+  test probes ignore the user's live weave.json (overrides -> {}) except the overrides test itself
+
+v31.30.3 additions (slider "does not work")
+  diagnosis: requests logged and re-renders counted, but every move re-rendered all pending hops, a drag posted several values per second,
+             the Stable Audio worker sat at 99 % GPU and a single hop call took 10-19 s instead of 2 s
+  horizon: only hops playing within 20 s are re-rendered (far hops wait; the flag stays armed); dead band 0.02; playing_noise / queued in the API
+  UI: "playing X · N queued" next to the slider, polled every 2 s; app.js / app.css cache-busted (v=31-30-3)
+
+v31.30.4 additions (crackles, second pass)
+  transformed audio click metric (6 kHz+ derivative spikes): original 15.2/s; 4 steps 13.2/s; 6 steps 15.0/s; 8 steps 13.8/s; no NaN; peaks <= 0.74 -> the audio is clean
+  dropouts: xruns rose ~1 per 7 s with bridge_fill_ms falling below the 128 ms cushion; the GPU workers ran AboveNormal with torch on all cores
+  fix: workers BelowNormal + torch.set_num_threads(4) + OMP/MKL 4 (applied live: 0 xruns in 90 s); bridge cushion JOY_BRIDGE_BLOCKS made configurable; 28 blocks broke playback live (never reached start-up fill) -> kept at 7
+
+v31.30.5 additions
+  gpu_engine: pid-file guard - a worker started < 300 s ago and still alive is waited for, never duplicated; created BelowNormal
+  live: removing a duplicate worker took xruns from ~17 / 2 min to 1 / 2 min and window generation from 27-36 s back to 11-19 s
+
+v31.30.6 additions
+  live: a single Stable Audio worker still came up AboveNormal -> 39 xruns / 95 s once the weave started; set to BelowNormal live -> 0 xruns / 100 s
+  every GPU worker lowers its own process priority to BelowNormal at start-up (SetPriorityClass 0x4000); launcher bridge cushion 14 blocks
+
+v31.30.7 additions
+  typed ctypes priority call (the untyped one failed with error 6 and left the workers AboveNormal); launcher waits for old GPU workers to exit
+  weave: Stable Audio call retried once, health re-probe every 5 s, error history (failed / late windows) in the status
+
+v31.30.8 additions
+  priority: the audio process priority actually lands (AboveNormal 0x8000, thread raised, MMCSS Pro Audio) - typed 64-bit handles; the untyped calls had failed silently
+  watchdog: single instance (pid marker, older ones exit), never raises SA3 above BelowNormal; the launcher retires old watchdogs first
+  live finding: 20+ watchdogs of earlier deploys, 13 AMT listeners, GPU 7.7 / 8 GB -> cleaned; app process now AboveNormal, workers BelowNormal
+  launcher: the app is killed FIRST by port owner / name and awaited before the workers (the folder filter never matched 'python.exe app.py')
+
+v31.30.9 additions
+  bridge: deficit reclaim (cushion refilled at up to 16 samples/block below target); ui: status polling 1 s
+  boundary: 100 ms single-source blends at window boundaries (first clip starts 100 ms before the window, last clip ends at the window end;
+            cancel clips run start-100 ms .. end with 100 ms ramps and sum to exactly 1); first window keeps its raised-cosine fade-in
+  measured before the fix: bridge fill trend -0.7 ms/s with stalls never recovered; UI ~7 status requests/s at 27-30 ms each
+
+v31.30.10 additions (battery)
+  separation chunk overlap 1: 1.75 s / 16 s on battery (overlap 2: 4.6-7.6 s); correlation 0.9992, relative difference 0.040
+  power: best-performance overlay, CPU min 100 % (DC 0x64 verified), core parking off, battery-saver threshold 0; lookahead 48 s; no AMT worker; SA3 mem fraction 0.70
+  diagnostics: dsp_max_ms / capture_gap_max_ms / bridge_target_ms in the status; GIL-hold measurement of every per-window step <= 19 ms; DPC max 1 %
+
+v31.30.11 additions (effect strength)
+  worker check: 128/128 windows on time, 0 late / failed / skipped, sep 1.4 s, sa 2.4 s; sa3 log: only health-connection aborts
+  full-song effect measurement (noise 0.61, 8 s hops, 4 windows): cfg 1.0 effect 20.7 (16.7-30.6) harmony 0.85 seams 0.99/0.90; cfg 2.5 35.1 (25.6-45.2) 0.85 1.00/0.95; cfg 4.0 52.5 (45.5-59.7) 0.87 1.00/0.95
+  default cfg 4.0; every hop records its cfg; set_cfg persists + re-renders; API cfg; UI STABLE FX slider
+
+v31.30.12 additions (start-up)
+  the first woven window is the first one >= 8 s ahead of the render position (window 1 at 16 s), requested immediately from the ring (was ~96 s of untouched record after LET'S GO)
+  a session restart clears the previous session's hops / pending / context / re-render flag, keeps the slider settings
+
+v31.30.13 additions
+  engine ring snapshot clamp 30 -> 58 s (window 1 no longer skipped at start-up; first woven audio ~16 s after LET'S GO)
+  effect measurements (3 windows): 0.46/3.5 -> 40 (harmony 0.93); 0.65/1.0 -> 26 (0.79); 0.65/4.0 -> 56 (0.87, seams 1.00/0.91); 0.75/4.0 -> 54 (0.79, seams 0.99/0.83)
+
+v31.30.14 additions (UI lag)
+  measured: /api/agentic/status 18 ms / 42 KB, /api/realtime/status 16 ms / 21 KB, ~2 req/s; app 70 % of a core; machine 50 %; the live theme ran ~36 fps with 14 backdrop-filters + 15 blurs
+  performance mode (body.perf) while the session is live: blur/backdrop/animations off, theme 10 fps, spectrum 20 fps; node --check ok
+
+v31.30.15 additions (low-latency experiment; scratchpad measure_lowlat.py, GPU shared with the live session)
+  2 s windows: 1.5 s work/window (max 2.3 s) -> not real time; seam excess level step median 3.4 dB max 16.6 dB; effect 42; harmony 0.82
+  4 s windows: 1.3 s (max 1.35) real time; effect 51; harmony 0.85 -> optional profile JOY_WEAVE_PROFILE=lowlat + LAUNCH_LOWLAT.ps1 (10 s lag)
+  default profile unchanged (16 s windows, 48 s lag)
+
+v31.30.16 additions (4 s lag live)
+  ultralow profile live: audible 4.1 s after LET'S GO, first woven clip +2.0 s, 1.1 s work per 2 s window (sep 0.42 + sa 0.66), 63/65 windows (first late: cold SA call 6.7 s), 0 xruns
+  2 s windows offline (noise 0.51): 1.42 s work (max 1.77) at FX 1.0, seams excess level step median 2.4 dB max 7.7; FX 4.0: 1.40 s, 4.1 dB max 10.9
+  lowlat profile live (10 s lag): 1.3 s work per 4 s window, 34/34 windows, 0 xruns, first clip 10 s after audible
+
+v31.30.17: mid profile (8 s windows, 20 s lag after listening; 14 and 16 s tried; LAUNCH_MID.ps1): live audible 20.4 s, first clip +14 s, 2.7 s/window, 0 late, 0 xruns; lowlat stays 10 s (8 s tried live, rejected)

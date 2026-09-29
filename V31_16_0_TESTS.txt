@@ -1,0 +1,50 @@
+JoyMetric v31.16.0 — SongMind Validation
+========================================
+
+STATIC
+PASS  py_compile: app.py · agentic_live_dj.py · dj_director_v3.py
+      realtime_native_engine.py · musical_intelligence.py · rust_dsp.py
+PASS  node --check static/app.js
+PASS  cargo build --release (native/joymetric_rt v3117)
+
+SONGMIND SUITE (24/24 PASS)
+
+CLICK-FREE (the crackle root causes)
+PASS  bassline: max sample jump / max sine slope 0.69 (was 41.3)
+PASS  kick decays across 16th edges (low-band edge jump 0.0014 vs peak 0.092)
+PASS  kick still on the locked beat (ratio 6.8)
+
+HATS 2.0
+PASS  bar-to-bar humanization variation 0.169 vs 0.021 static (8x)
+PASS  finite / bounded
+PASS  busy source top end -> density 0.35 (thinning engaged)
+PASS  CLUB vs HIPHOP style grooves differ
+
+SONG MEMORY (ABAB form, 20 bars streamed)
+PASS  returning verse recognized as a repeat (run 4)
+PASS  next chorus predicted at beat 96 = bar 24 exactly (lag 16)
+PASS  phrase length inferred (32 beats)
+
+TRANSITION LEGALITY
+PASS  landings are phrase boundaries
+PASS  memory+section boundary ranks first
+PASS  8-beat rise starts exactly 8 beats before the landing
+PASS  no landing without tension to spend
+PASS  unsure beat grid defers beat-critical gestures
+PASS  no weave / exit through a foreground vocal
+PASS  no bass swap during a modulation
+
+DIRECTOR / AGENT
+PASS  plan targets the legal landing (52); DROP lands there (punch follow-through <= +2)
+PASS  no drop archetype when nothing is legal
+PASS  song memory + legality exposed in status
+PASS  hat style/humanize posted (hip-hop -> HIPHOP, var 0.95)
+
+PERFORMANCE
+      everything-on block (incl. native hats): median 0.88 ms · p99 1.30 ms
+      (Python baseline 5.13 ms median / 8.26 ms p99 -> 5.8x / 6.4x)
+PASS  far inside the 42.67 ms budget
+
+REGRESSION (Rust path active)
+PASS  v31.15 11/11 · v31.14 21/21 · v31.13 12/12 · v31.12 21/21 · v31.11 29/29 · v31.10 32/32
+TOTAL 150/150

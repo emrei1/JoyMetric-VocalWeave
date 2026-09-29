@@ -1,0 +1,52 @@
+JoyMetric v31.17.0 — GridTruth Validation
+=========================================
+
+STATIC
+PASS  py_compile: agentic_live_dj.py · realtime_native_engine.py · beat_clock.py
+
+LIVE FIELD MEASUREMENTS (v31.16 session, before the fix)
+      xruns 0 · concealments 0 · render/capture 0.9994x · gap 15.0 s constant
+      60 s headphone-endpoint loopback: 0 clicks (thr 7/4), 3 at thr 3, 0 gaps
+      output vs input: -2..-5 dB every band, HF crest 10.8 vs 23.2 (no sizzle)
+      tempo estimate 83.33/115.38/166.67/125.00 vs 82.65 true (quantised + flips)
+      grid confidence 0.38-0.46 (gate 0.45) -> all beat-critical gestures deferred
+      neural brain -> :8768 (nothing listening) · bridge fill 709 ms (target 299)
+
+BEATCLOCK v2 SUITE (14/14 PASS)
+PASS  steady 127.3 BPM: tempo error 0.066 %
+PASS  steady confidence >= 0.80 after lock (0.88)
+PASS  no relocks on steady tempo
+PASS  beat phase error 0.0 +/- 0.4 ms (max 1.6 ms)
+PASS  analyze cost 11.3 ms per 15 s window
+PASS  tempo ramp 120 -> 126 (6 BPM per minute) tracked within 2 %
+PASS  mature lock ignores a 12 s 122.3-BPM hump inside the band (peak tracking)
+PASS  live capture: first record locked within 0.6 % of 82.65 (17/17 windows)
+PASS  live capture: second record relocked within 0.6 % of 124.0 (8/8)
+PASS  live capture: exactly one relock (the record change)
+PASS  live capture: confidence >= 0.45 while locked (0.46 / 0.63)
+PASS  live capture: audio-only relock 6 s after the record change
+PASS  white noise confidence < 0.35 (0.08)
+PASS  sparse kick-only 90 BPM locks within 0.5 %
+
+GRIDTRUTH AGENT SUITE (18/18 PASS)
+PASS  stale measurement never moves the anchor again
+PASS  consistent fresh measurement keeps the anchor (0.00 ms)
+PASS  v31.16 reference: stale ticks would have dragged 279 ms per interval
+PASS  tempo refinement 120 -> 120.6 keeps phase continuous (0.007 beats)
+PASS  consistent half-beat disagreements relock in one snap (0.50 beats)
+PASS  a single outlier measurement leaves the grid untouched
+PASS  status: realtime block slim (no spectrum / gradients)
+PASS  status: performance_memory capped at 12
+PASS  brain client targets the semantic worker port (8767)
+PASS  _analysis_features: BPM 126.43 for 126.4 true
+PASS  _analysis_features: measurement time stamp carried
+PASS  _analysis_features: beat phase -2.4 ms from truth
+PASS  _analysis_features: confidence 0.78 (gate 0.45)
+PASS  _analysis_features: JSON-safe
+PASS  _loop: 15 s snapshot copied 4x in 1.6 s (was ~21x)
+PASS  _loop: analysis carries time stamp · no agent error
+PASS  record change (Spotify title) resets the tempo memory
+
+REGRESSION (Rust path active)
+PASS  v31.16 24/24 · v31.15 11/11 · v31.14 21/21 · v31.13 12/12 · v31.12 21/21 · v31.11 29/29 · v31.10 32/32
+TOTAL 182/182

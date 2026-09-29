@@ -1,0 +1,60 @@
+JOYMETRIC v31.0.0 AGENTIC DJ PROTOTYPE 01 — TEST REPORT
+=========================================================
+
+BASELINE / REGRESSION
+- Base package: v30.4.47 LowEndIntegrity.
+- realtime_native_engine.py: BYTE-IDENTICAL to v30.4.47 (PASS).
+- realtime_semantic_server.py: BYTE-IDENTICAL to v30.4.47 (PASS).
+- driver/patch_joymetric_driver.py: BYTE-IDENTICAL (PASS).
+- INSTALL_JOYMETRIC_DRIVER.ps1: BYTE-IDENTICAL (PASS).
+- SETUP_AND_START.ps1: BYTE-IDENTICAL (PASS).
+- Therefore Spotify auto-route, JoyMetric WDM/WaveRT driver, exact Audio Out,
+  LowEndIntegrity, CrackleGuard, fast control response and existing 15D mapping
+  are not modified by the Agentic DJ prototype.
+
+STATIC VALIDATION
+- python -m py_compile app.py agentic_dj_engine.py realtime_native_engine.py
+  realtime_semantic_server.py processor.py: PASS.
+- node --check static/app.js: PASS.
+- Duplicate HTML id scan: PASS (0 duplicates).
+
+MIR / PLANNER SYNTHETIC TEST
+- Generated two 48 kHz stereo kick/bass test tracks.
+- Deck A source tempo: 92 BPM; detected: 90.726 BPM.
+- Deck B source tempo: 104 BPM; detected: 104.167 BPM.
+- Beat/bar maps produced usable phrase and cue candidates on both decks.
+- Prompt: dark modern hip-hop / clean 808 / hard bass swap / rising energy.
+- Policy: hip-hop phrase cut, 8-bar handoff, very-low overlap, restrained semantic FX.
+- Phrase-pair candidate search: 20 candidates.
+- Selected critic score: 0.8206.
+- Critic components: phrase 1.000 / energy 1.000 / harmonic 0.730 / tempo 0.250.
+- Quality guard correctly capped a >8% tempo shift to the prototype ±8% limit.
+
+AUDIO RENDER STRESS TEST
+- 48 kHz stereo; 2,884,992 rendered frames.
+- Full deterministic preview render completed with finite PCM (PASS).
+- Peak: 0.712699 linear (~ -2.94 dBFS sample peak).
+- RMS: 0.123929 linear (~ -18.14 dBFS).
+- No NaN / Inf: PASS.
+- Max sample peak < 0.95: PASS.
+- 1024-frame boundary derivative p99: 0.017392.
+- Global derivative p99: 0.023147.
+  Boundary discontinuity is below the global p99 rather than elevated, which is
+  consistent with smooth filter/crossfade state across render blocks.
+
+TEMPO / KEYLOCK PREPARATION
+- Deck B tempo preparation occurs before playback, not in Audio Out thread.
+- Resample + Pedalboard pitch compensation impulse onset remained at sample 0
+  for test ratios 0.94 and 1.06; no gross cue-latency offset observed.
+
+REALTIME PLAYBACK ARCHITECTURE
+- Playback thread streams pre-rendered float32 PCM only.
+- No track decode, ffmpeg process, model inference, MIR analysis, prompt planning,
+  candidate search or file reads occur in the Audio Out loop.
+- Exact PyAudioWPatch selected endpoint is first choice; sounddevice/SoundCard
+  WASAPI remain failovers.
+
+LIMITATIONS / NOT YET HARDWARE-TESTED HERE
+- Linux artifact environment cannot execute Windows WASAPI/WDK hardware playback.
+- Exact Windows Audio Out code is inherited from the user's known-good v30.4.47.
+- Prototype does not claim stems, PFL, MIDI/HID, scratching or multi-song set planning.

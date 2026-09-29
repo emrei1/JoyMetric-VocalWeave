@@ -1,0 +1,37 @@
+JoyMetric v30.4.35 — JoyMetric-owned Virtual Audio Driver validation
+===================================================================
+
+APP / DSP STATIC CHECKS
+- realtime_native_engine.py Python compile: PASS
+- app.py Python compile: PASS
+- driver/patch_joymetric_driver.py Python compile: PASS
+- static/app.js Node syntax: PASS
+- feature_params AST parity vs v30.4.34: PASS (1a67c1d45845)
+- RealtimeDSP AST parity vs v30.4.34: PASS (519dc52e43b4)
+- TransparentAutoGainStage AST parity vs v30.4.34: PASS (d4fbadd38124)
+
+ROUTING INVARIANTS
+- JoyMetric Virtual Input + JoyMetric Internal Capture required: PASS
+- Internal JoyMetric endpoints hidden from user device list: PASS
+- App route targets JoyMetric Virtual Input automatically: PASS
+- Internal capture opens signed PCM32 and converts to float32 for existing DSP: PASS
+- Exact selected PyAudioWPatch WASAPI physical Audio Out remains first playback backend: PASS
+- Obsolete ProcTap input class removed from app-source route: PASS
+- Obsolete second-output parking selector removed: PASS
+
+DRIVER PATCH
+- Microsoft current Simple Audio Sample source anchors checked against upstream on 2026-08-28: PASS
+- Current upstream speaker format observed as 48 kHz / stereo / 16-bit; patch converts it to PCM32 to match current mic capture format: PASS
+- Fresh mock using current upstream whitespace/layout patterns: PASS
+- Kernel JoyMetricCablePush render path injected: PASS
+- Kernel JoyMetricCablePull capture path injected: PASS
+- Stock capture sine generator removed by patch assertion: PASS
+- Shared ring: 256 KiB; overflow drops oldest bytes; underrun zero-fills: PASS (static)
+- Unique root hardware ID ROOT\JoyMetricVirtualAudio: PASS
+- Unique JoyMetric product/name GUID patch assertions: PASS
+- Friendly endpoints JoyMetric Virtual Input / JoyMetric Internal Capture: PASS
+
+VALIDATION BOUNDARY
+- The Windows kernel driver was NOT compiled or loaded in this Linux artifact environment.
+- The first real WDK compile, catalog/signature validation, PnP enumeration and realtime render→capture test must occur on the target Windows machine.
+- This is a DEVELOPMENT test-signed driver workflow. Production distribution requires normal Microsoft kernel-driver signing.

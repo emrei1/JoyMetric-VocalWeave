@@ -1,0 +1,15 @@
+JoyMetric v31.24.0 GrooveNet - validation record (2026-09-04)
+=============================================================
+v31.24 GROOVENET SUITE (14/14 PASS)
+PASS  GrooveNet numpy runtime reproduces the torch model (parity 8.6e-05)
+PASS  GrooveNet beats every placement baseline on held-out music: F1 0.578 vs off-beat 0.347 / kick-copy 0.471 / snare-copy 0.401 / corpus prior 0.120 (3473 held-out windows)
+PASS  GrooveNet micro-timing and sound heads beat the mean predictors (mt 0.254<0.263 cells, gain 3.23<4.36 dB, tilt 2.84<3.10 dB)
+PASS  GrooveNet forward < 15 ms (numpy, agent thread)
+PASS  pattern(): densest allowed set of the most probable cells, never two neighbours; swing(): weighted off-beat offset
+PASS  features: synthetic groove -> kicks 0/8/16/24, snares 4/12/20/28, hats on the 8ths, swung hats show +0.15 cells
+PASS  rack pluck: hits exactly at the model beat positions incl. micro-timing (sample-exact); tilt EQ; level_mult; swung arps
+PASS  GrooveLive: window cut at the beat positions on 48 kHz audio, features match training, outputs complete
+PASS  agent: the model stab plan reaches the rack spec (hits, swing, tilt, level) and the drummer swing
+
+REGRESSION: v31.23 79/79 · v31.22 24/24 · v31.21 17/17 · v31.10-v31.20 + beat clock unchanged
+TOTAL 372/372

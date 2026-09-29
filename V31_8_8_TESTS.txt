@@ -1,0 +1,43 @@
+JoyMetric v31.8.8 — Musical Deck-B Match Validation
+Date: 2026-08-31
+
+STATIC
+PASS — Python compile: app.py, agentic_live_dj.py, realtime_native_engine.py, realtime_semantic_server.py, device_scan_worker.py
+PASS — JavaScript syntax: static/app.js
+
+FUTURE-AWARE DECK-B SELECTION
+PASS — future bar descriptor contains 12-bin chroma + 16-step rhythm signature
+PASS — future tonal-strength / energy / drums / vocal context can be passed through bounded agentic controls
+PASS — loop candidate search remains whole-beat aligned and bounded to recent history
+PASS — harmonic fit, rhythmic fit, salience, energy fit and seam quality are all represented in the capture score
+PASS — low-information material receives an absolute-activity salience penalty
+
+SYNTHETIC MUSICAL-MATCH TEST
+Scenario:
+- newest candidate = low-information filtered wash
+- intermediate candidates = mismatched tonal/rhythm material
+- 8-beat-old candidate = same tonal/rhythmic motif as the future target
+Result:
+PASS — selector chose offset = 8.0 beats
+PASS — chosen candidate harmonic match ~0.78
+PASS — chosen candidate rhythm match = 1.00
+PASS — low-information newest candidate salience ~0.09 and was rejected
+
+LIVE SLICER
+PASS — slice salience added to source-aware slice ranking
+PASS — downbeat anchors 0 and 4 remain immutable
+PASS — existing micro-crossfade / seam guards retained
+
+REALTIME STRESS
+48 kHz stereo / 2048 frames / Deck-B layer + slicer + B FX:
+PASS — finite PCM / no NaN / no Inf
+p95 ~2.26 ms
+p99 ~2.82 ms
+max observed sample peak ~0.324
+Audio quantum budget = 42.67 ms
+
+REGRESSION
+PASS — Deck-B-off neutral mixer output is sample-identical to v31.8.7 (max abs diff = 0.0)
+
+HARDWARE BOUNDARY
+Windows Spotify routing / physical WASAPI / Bluetooth or USB endpoint playback cannot be executed in this Linux validation environment. Final subjective harmonic and groove fit must be judged on the user's Windows playback path.

@@ -1,0 +1,50 @@
+JoyMetric v31.8.6 — Intelligent Live Slicer validation
+
+STATIC
+PASS — Python compile: app.py, agentic_live_dj.py, dj_director_v3.py, realtime_native_engine.py, realtime_semantic_server.py, device_scan_worker.py, processor.py
+PASS — JavaScript syntax: static/app.js
+PASS — parameterized gesture family count = 28
+
+REGRESSION / CLEAN PATH
+PASS — v31.8.5 vs v31.8.6 mixer with b_slicer_mix=0 and b_fx=0: sample-level max difference = 0.0
+PASS — RealtimeDSP AST identical to v31.8.5
+PASS — MasterSafetyCompressor AST identical to v31.8.5
+PASS — SourceFidelityGuard AST identical to v31.8.5
+PASS — LookaheadPeakLimiter AST identical to v31.8.5
+
+SLICER MUSICALITY
+PASS — 8 equal source cells created from captured Deck B loop
+PASS — slice anchors 0 and 4 are immutable
+PASS — safe pattern modes: GROOVE / FILL / CALL / ACCEL / GHOST
+PASS — source descriptors: energy + transient density + brightness proxy
+PASS — local-neighbour source-aware refinement; no random global shuffle
+PASS — rearranged slice boundaries use ~2 ms micro-crossfade
+Representative FILL map: [0,1,2,3,4,5,7,6] (25% controlled rearrangement)
+Representative derivative test: p99 ~0.0101, p99.9 ~0.0199, max ~0.0327
+
+DIRECTOR
+PASS — rising DnB boundary selected DeckB Slice Remix Drop candidate
+Representative choreography:
+  GROOVE_LIFT -> DECKB_SLICE_GROOVE -> DECKB_SLICE_FILL -> DECKB_SLICE_ACCEL -> DROP -> DECKB_RELEASE -> PUNCH_IN
+PASS — new slice gestures carry continuous slice_mix / b_fx / texture / transient / layer parameters
+PASS — vocal guard reduces Deck B contribution during foreground vocals
+
+DECK B REMIX FX BUS
+PASS — dedicated Deck-B-only beat-synchronous tap bus
+PASS — transient accent + bounded stereo bloom
+PASS — wet RMS cap relative to Deck B dry level
+PASS — no hard anti-phase widening
+
+HEAVY MIXER STRESS
+48 kHz stereo / 2048-frame blocks / 174 BPM
+Deck B layer 42%, slicer 92%, ACCEL mode, B Remix FX 95%
+mean ~1.38 ms
+p95 ~2.10 ms
+p99 ~2.42 ms
+max ~6.59 ms
+peak ~0.3192
+Realtime block budget = 42.67 ms
+PASS — finite PCM / no NaN / no Inf
+
+VALIDATION BOUNDARY
+Physical Windows Spotify/WASAPI playback and subjective musical quality must still be verified on the user's hardware.

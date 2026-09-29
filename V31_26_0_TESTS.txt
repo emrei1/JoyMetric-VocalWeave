@@ -1,0 +1,17 @@
+JoyMetric v31.26.0 LineMind - validation record (2026-09-04)
+============================================================
+v31.26 LINEMIND SUITE (17/17 PASS, v31.26.1 AI-only policy)
+PASS  LineFinder: bass / top / inner voices from transcribed notes; context matrix layout (58 per sixteenth)
+PASS  LineFinder on audio: Basic Pitch finds the melody and the bass line as separate lines (~1.3-2 s per 2 bars)
+PASS  MelodyNet numpy runtime reproduces the torch model (log-prob parity 3e-3)
+PASS  MelodyNet (final, 428k examples) beats unigram (2.04) and bigram (1.73) baselines on held-out songs: NLL 0.937, pitch accuracy 0.35; samples in-key 0.94 (data 0.92), consonance vs top line 0.85 (data 0.83), 9.2 onsets / window (data 9.5)
+PASS  MelodyNet sampling: every note obeys the chord / key mask, the register and the consonance rule against the record top line; 20 ms
+PASS  MelodyNet scoring: its own part is far more likely than a random note salad (-0.62 vs -5.76)
+PASS  LineDuck: the line fundamental and harmonic drop >= 12 dB inside the segment, other tones within 1.5 dB; exact reconstruction outside; mixer status
+PASS  composer v2: lines -> our model (3 candidates) -> ranking by likelihood + fit + density -> render; sparser candidate wins; replace_line hands the record top-line notes back
+PASS  planner (AI-only): PEAK blocks 3-4 of a window at high creativity and every BREAK replace the record line; no rack pads / plucks / arps anywhere; COLOR touches on blocks 6-7 at max creativity
+PASS  agent: a replacing part schedules frame-exact harmonic line-duck segments and the clip
+PASS  genre probe: zero-shot CLAP genre + tagtraum id; the DJ prompt wins when it names a genre
+
+REGRESSION: v31.25 14/14 · v31.24 14/14 · v31.23 79/79 (selector pool updated) · v31.22 24/24 · v31.21 17/17 · v31.10-v31.20 + beat clock unchanged
+TOTAL 403/403

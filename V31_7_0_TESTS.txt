@@ -1,0 +1,53 @@
+JoyMetric v31.7.0 — Concert Controller V2 / Continuity Engine
+
+STATIC
+PASS Python compile: app.py, agentic_live_dj.py, realtime_native_engine.py, realtime_semantic_server.py, device_scan_worker.py
+PASS JavaScript syntax: static/app.js
+
+ACTION SPACE
+PASS neural atomic actions = 20
+PASS concert macros = 16
+PASS total discrete controller actions = 36
+PASS all 16 concert macros executed in synthetic controller-state unit test
+PASS planner produces max one primary action per beat
+PASS receding-horizon planner does not rewrite the committed next 2 beats
+
+CONTINUITY / CUT FIX
+PASS graceful Deck B release: loop is retained until smoothed crossfader reaches Deck A
+PASS synthetic ROLL -> RELEASE minimum block RMS / pre-release mean = 0.99295
+PASS transformer gate envelope now has a concert-safe nonzero floor
+PASS emergency playback underrun path uses crossfaded recent-waveform concealment rather than a silent hole
+PASS playback FIFO capacity increased to ~1.8 s; 7-quantum target / 8-quantum startup / 14-quantum adaptive ceiling
+
+TEMPORAL AGENT CPU LOAD
+PASS full per-chunk BPM/key/STFT calls removed from future segmentation
+PASS one global analysis + lightweight per-segment energy/band/onset descriptors
+PASS 15 s / 6-segment synthetic scan mean ~17.72 ms, p95 ~19.88 ms
+PASS no extra CLAP inference per temporal segment
+
+HIGH-BPM EXECUTION
+PASS low-cost ~55 ms fast scheduler tick added between MIR observations
+PASS fast scheduler copies no 15 s PCM and performs no FFT/model call
+PASS action execution remains beat-quantized and vocal-guarded
+
+AUDIO STRESS — 48 kHz stereo, 2048 frames
+Heavy RealtimeDJMixer:
+  mean ~2.72 ms
+  p95  ~4.29 ms
+  p99  ~5.28 ms
+Full heavy mixer + inherited RealtimeDSP:
+  mean ~14.29 ms
+  p95  ~19.71 ms
+  p99  ~22.94 ms
+  max  ~27.74 ms
+Realtime block budget: 42.67 ms
+PASS finite output / no NaN / no Inf
+
+MASTER REGRESSION
+PASS RealtimeDSP AST-identical to v31.6
+PASS MasterSafetyCompressor AST-identical to v31.6
+PASS SourceFidelityGuard AST-identical to v31.6
+PASS LookaheadPeakLimiter AST-identical to v31.6
+
+WINDOWS BOUNDARY
+Physical Spotify routing, WASAPI scheduling and the user's headphone endpoint cannot be executed in this Linux artifact environment. Final xrun/audibility validation is on the user's Windows machine.

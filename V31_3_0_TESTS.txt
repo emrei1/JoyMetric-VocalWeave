@@ -1,0 +1,55 @@
+JoyMetric v31.3.0 — Professional Lookahead Agentic DJ Validation
+================================================================
+
+STATIC / SYNTAX
+PASS  python -m py_compile:
+      app.py
+      agentic_live_dj.py
+      realtime_native_engine.py
+      realtime_semantic_server.py
+      device_scan_worker.py
+      processor.py
+PASS  node --check static/app.js
+
+AUDIO-SAFETY PARITY AGAINST v31.2.0
+PASS  RealtimeDSP AST identical
+PASS  MasterSafetyCompressor AST identical
+PASS  SourceFidelityGuard AST identical
+PASS  LookaheadPeakLimiter AST identical
+
+LOOKAHEAD ARCHITECTURE
+PASS  Agentic lookahead default = 15.0 s, bounded 8–20 s.
+PASS  Agentic mode is pre-armed before native audio thread creation, so the long lookahead exists from sample zero.
+PASS  Future/raw Spotify PCM ring is separate from delayed/source-time PCM ring.
+PASS  Future ring is used for neural planning; delayed ring is exposed separately for audible-time beat/transient execution.
+PASS  Normal non-Agentic continuity lookahead remains the existing short path.
+
+DNB / GENRE-MORPH POLICY
+PASS  Prompt: "drum n bass like speed and drums a banger, smooth professional transition"
+      compiled to style=drum-and-bass, morph_target=dnb, morph_bars=16,
+      target_feel_bpm=174, performance_fx=0.84 at creativity=0.55.
+PASS  Staged choreography present:
+      FOUNDATION -> PROPULSION -> BUILD -> RELEASE -> DNB FEEL LOCK.
+PASS  High-vocal test reduced both hiss/riser and double-time articulation compared with low-vocal test.
+PASS  Half-beat source roll is guarded by vocal/drum checks and fires at most once per morph.
+PASS  Impact is sequence-triggered and fires once per morph release.
+
+PERFORMANCE FX DSP STRESS
+Environment: Linux validation, 48 kHz stereo, 1024-frame blocks, synthetic kick+bass+hats.
+Active: drum drive 0.78, double-time 0.72, hiss/riser 0.62, impact,
+        performance punch/energy/clarity/air/bass-tighten, Deck A EQ/filter,
+        then unchanged RealtimeDSP master.
+PASS  finite output / no NaN / no Inf
+PASS  peak = 0.4549 in validation run
+PASS  mean processing = 8.375 ms/block
+PASS  p95 processing = 12.966 ms/block
+PASS  p99 processing = 15.689 ms/block
+      48 kHz / 1024-frame block budget = 21.33 ms
+
+PERFORMANCE FX ISOLATION
+PASS  No neural inference inside RealtimeDJMixer performance FX.
+PASS  No HTTP request, subprocess, filesystem access or Spotify transport in performance FX.
+PASS  Riser and impact are bounded realtime synthesis; drum layer is source-derived from the playing PCM.
+
+IMPORTANT VALIDATION BOUNDARY
+The build environment does not provide Windows WASAPI/JoyMetric Virtual Driver or the user's persisted Windows CLAP cache. Therefore the final Spotify route, exact physical Audio Out timing and subjective transition quality must be verified on the user's Windows machine. The architecture intentionally fail-isolates the neural worker from the audio callback.

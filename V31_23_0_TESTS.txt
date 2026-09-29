@@ -1,0 +1,48 @@
+JoyMetric v31.23.0 RackMind - validation record (2026-09-04)
+=============================================================
+run: roformer_sep python, PYTHONIOENCODING=utf-8, scratchpad validate_v31_*.py
+
+v31.23 RACKMIND SUITE (79/79 PASS, v31.23.2 instruments + prompt/record fit)
+PASS  rack pad/arp/pluck/lead: exact length (block + tail), finite, soft ceiling, level within 8 % of target, < 700 ms (100-210 ms)
+PASS  rack pad/arp/pluck/lead: every note is a chord tone of the bars it plays on (note histogram 1.000)
+PASS  rack arp: every note starts on the absolute 16th grid even when the block starts mid-beat (b0 = 1.5)
+PASS  rack arp: the first audible onsets sit on the 16th grid
+PASS  rack pad: continuation starts at level (no 0.55 s attack); a fresh pad swells in
+PASS  freeze: exactly 4 beats, 23 tightening slices, each retriggers the hit, silent gap before the release, fade at sample 0
+PASS  freeze: level-matched to the programme (HP rms within 25 %: the soft ceiling tames the rolled transient)
+PASS  chords: Am F C G progression recovered per beat (bar-line aware Viterbi)
+PASS  chords: noise-only bars fall back to the key's tonic and are flagged weak
+PASS  planner: blocks are planned with a one-block delay (k-1 and k+1 described), >= 3 s ahead
+PASS  planner: the drop block is DROP, the block before it BUILD, steady blocks GROOVE
+PASS  planner DROP: the drop's first hit is frozen for 4 beats from the snapped downbeat, the record steps aside, pad around it, drummer up
+PASS  planner BUILD: pad swell with an opening filter + arp, riser and snare-rush bias into the drop
+PASS  planner at creativity 1.0: silence is the default (GROOVE blocks carry no layers); the rack speaks at the record's highs in short windows (PEAK), lowkey
+PASS  planner: the melody takeover happens only at a high, one bar, at most once per 32 s
+PASS  planner: chords come from the record and the plan is cheap (335 ms for 9 blocks)
+PASS  planner at creativity 0.2: no takeover, no freeze, nothing but the build pad before the drop
+PASS  planner TRANSITION: pad swell from the change frame, takeover from the change frame, released over ~2 s
+PASS  planner FLOW: a centred vocal block gets no new synth and no takeover
+PASS  takeover lane: ramp-in / full amount / ramp-out / release; freeze segments drive the full-band curve
+PASS  takeover duck: transparent at zero amount; full amount: centre -12.5 dB, bass -1.4 dB, sides -5.2 dB; freeze < -30 dB
+PASS  mixer: the rack clip keeps its level over a quiet programme (not capped to ~20 % of the record)
+PASS  mixer: a frame-scheduled freeze silences the programme inside its segment only; status carries takeover/freeze
+PASS  agent: planner -> rack queue -> layers scheduled at absolute render frames (>= 3 s ahead)
+PASS  agent: every clip starts on a block boundary or on the drop downbeat
+PASS  agent: the DROP freeze is frame-scheduled in the engine at the drop downbeat, 4 beats long; roll clip exactly 4 beats
+PASS  agent status: the block plan is visible (characters, chords, layers)
+PASS  agent bias in BUILD: noise riser > 0.6 near the block end and the snare rush armed in the last beat
+PASS  agent: the play-time gate keeps rack clips whose notes sit in the record's pitch classes
+PASS  agent: the AI drummer is trimmed lowkey every tick (presence x0.62, amounts x0.8)
+PASS  agent: JOY_SYNTH_AI defaults off, the rack is the composer
+PASS  prompt profile: dark / 808 clean / restrained; dreamy / floating / space; aggressive / raise energy / bright -> rack modifiers
+PASS  pad variants: warm < bright < glass in spectral centroid; 'keep the 808 clean' drops the pad's < 150 Hz share by >= 12 dB
+PASS  selector: gating, ranks all instruments of both roles by prompt AND record fit, 3:2:1 rotation at creativity >= 0.8, dead worker keeps defaults
+PASS  agent: every rack render carries the prompt profile and the selected variant
+PASS  instruments (19): finite, exact length, chord-tone notes, level within 15 %, < 900 ms; palette spread 163-5065 Hz; KS decay; FM bell
+PASS  planner windows: 2 / 3 / 4 blocks per 16 s by creativity; long high at creativity 1.0: 4 PEAK + 1 COLOR per window, rest silent
+
+REGRESSION (unchanged suites)
+v31.10 32/32 · v31.11 29/29 · v31.12 21/21 · v31.13 12/12 · v31.14 21/21 · v31.15 11/11 · v31.16 24/24
+v31.17 18/18 · v31.18 21/21 · v31.19 25/25 · v31.20 10/10 · beat clock 14/14 · v31.21 17/17 · v31.22 24/24
+
+TOTAL 358/358

@@ -1,0 +1,16 @@
+JoyMetric v31.8.1 — Start/Route Handshake Validation
+
+PASS — Python compile: app.py, agentic_live_dj.py, dj_director_v3.py, realtime_native_engine.py, realtime_semantic_server.py, device_scan_worker.py
+PASS — JavaScript syntax: static/app.js
+PASS — Director V3 parity: agentic_live_dj.py SHA256 identical to v31.8.0
+PASS — Director V3 parity: dj_director_v3.py SHA256 identical to v31.8.0
+PASS — startup ordering static assertion: physical playback thread starts before instream.start_stream()/Spotify migration
+PASS — Audio Out preflight includes one real silent write, not start_stream() only
+PASS — intentional lookahead silence keeps Audio Out active until playback FIFO reaches startup cushion
+PASS — first musical block uses recovery/fade-in path after lookahead silence
+PASS — native start route deadline extended from 2.7 s to 12.0 s to avoid SVCL route-race cleanup
+PASS — dynamic fake-output test: preflight ready event asserted after successful write; buffered musical blocks subsequently emitted
+
+Windows validation boundary:
+- Physical WASAPI/Bluetooth/SVCL routing cannot be executed in this Linux build environment.
+- v31.8.1 changes the handshake specifically so endpoint failure occurs before Spotify migration and so valid slow route setup is not prematurely stopped.

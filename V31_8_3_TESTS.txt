@@ -1,0 +1,44 @@
+JoyMetric v31.8.3 — Source-Aware Transition FX Validation
+Date: 2026-08-31
+
+SCOPE
+- FX-quality-only upgrade on top of v31.8.2 Clean Headroom.
+- Agentic policy / Director V3 are intentionally unchanged.
+- Startup/route, CrackleGuard, headphone and shared-headroom fixes remain inherited.
+
+STATIC
+PASS — python py_compile: app.py, agentic_live_dj.py, dj_director_v3.py, realtime_native_engine.py, realtime_semantic_server.py, device_scan_worker.py
+PASS — node --check static/app.js
+PASS — agentic_live_dj.py SHA-256 identical to v31.8.2
+PASS — dj_director_v3.py SHA-256 identical to v31.8.2
+
+SOURCE-AWARE FX UNIT
+PASS — source-aware mode enabled in mixer status.
+PASS — riser event chooses a stable 0..3 spectral variant.
+PASS — double-time top percussion chooses a stable 0..3 groove/velocity variant.
+PASS — snare/drum rush chooses a stable 0..3 groove/velocity variant.
+PASS — reverse swell chooses a stable 0..2 spectral/body variant.
+PASS — rhythmic FX use one absolute sample clock; pattern state does not reset each audio block.
+PASS — source-derived transient/body bands are processed with separate filter state from synthetic air support.
+PASS — coherent stereo / restrained mid-side width replaces hard anti-phase noise behavior.
+
+SYNTHETIC MUSIC TEST
+48 kHz stereo / 2048-frame blocks.
+Source-aware riser test: finite PCM, peak ~= 0.3408.
+Source-aware hat/fill test: finite PCM, peak ~= 0.3318.
+Rhythmic per-step energy coefficient of variation ~= 0.4913 (non-flat velocity behavior).
+
+HEAVY TRANSITION FX STRESS
+Active: 174 BPM source, source-aware riser, reverse swell, snare rush, double-time percussion,
+drum drive, performance rack, echo, gate and repeated impacts.
+PASS — finite PCM / no NaN / no Inf.
+PASS — max sample peak ~= 0.2791 in the bounded synthetic run.
+Mean mixer processing ~= 3.64 ms/block.
+p95 ~= 4.93 ms/block.
+p99 ~= 6.67 ms/block.
+Realtime 2048-frame block budget at 48 kHz = 42.67 ms.
+
+VALIDATION BOUNDARY
+The artifact environment cannot perform the final subjective Windows Spotify/WASAPI/headphone listening test.
+The new unit/stress tests verify continuity, boundedness, source coupling, event variation and realtime cost;
+subjective FX timbre should be validated on real program material on the user's Windows machine.

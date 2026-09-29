@@ -1,0 +1,13 @@
+JoyMetric v30.4.40 TESTS
+
+Static checks:
+- DSP AST parity feature_params: PASS
+- DSP AST parity RealtimeDSP: PASS
+- DSP AST parity TransparentAutoGainStage: PASS
+- driver/patch_joymetric_driver.py unchanged from v30.4.39: PASS
+- INSTALL_JOYMETRIC_DRIVER.ps1 unchanged from v30.4.39: PASS
+- private loopback resolver: PASS
+- SVCL matched-item verification: PASS
+- loopback armed before routing: PASS
+- paired capture bypassed in app path: PASS
+- internal endpoints hidden: PASS

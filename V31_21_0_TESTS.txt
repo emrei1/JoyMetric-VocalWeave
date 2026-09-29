@@ -1,0 +1,30 @@
+JoyMetric v31.21.0 - SynthWeave (+ v31.20 DrumFront) Validation
+================================================================
+
+STATIC
+PASS  py_compile: agentic_live_dj.py / realtime_native_engine.py / synth_weave.py / drum_brain.py / drum_kit.py / beat_clock.py
+PASS  node --check static/app.js
+
+v31.20 DRUMFRONT SUITE (10/10 PASS)
+PASS  de-drum: transient energy of a drum loop -12.2 dB
+PASS  de-drum: kick body -18.7 dB, hats -13.4 dB
+PASS  de-drum: sustained pad unchanged (-0.7 dB)
+PASS  de-drum cost 0.34 ms per block
+PASS  presence: creativity max -> drummer hats x4.22, kick band x4.31 (own contribution), no clipping
+PASS  agent: drummer on + de-drum posted at both creativities (0.7 / 1.0)
+PASS  agent: presence 0.35 -> 1.0, hat amount 0.13 -> 0.50, density target 0.74
+
+v31.21 SYNTHWEAVE SUITE (14/14 PASS)
+PASS  prompt: kind + key words + tempo + drum-free negative prompt
+PASS  post-process: exact loop length, sub band < 120 Hz down >= 12 dB, level matched (0.84), seamless seam
+PASS  fake worker: async pipeline delivers the aligned loop, busy flag released
+PASS  engine: AI loop rejected for a stale capture seq, accepted for the playing loop
+PASS  engine: loop block blends record loop / AI loop by the smoothed mix; status ai_loop_ready + b_ai_mix
+PASS  agent: fresh capture -> one synth request (key + kind); ready -> Deck B crossfades (b_ai_mix 1.0, b_layer 0.40)
+PASS  status exposes synth_ai
+PASS  REAL Stable Audio worker (RTX 5070): 2-bar loop -> synth loop in 5.7 s (9.9 s first run), aligned, level matched, sub 0.08x, mids 2.2x
+
+REGRESSION
+PASS  DrumMind 25/25 / GrooveTruth 21/21 / BeatClock 14/14 / GridTruth 18/18
+PASS  v31.16 24/24 / v31.15 11/11 / v31.14 21/21 / v31.13 12/12 / v31.12 21/21 / v31.11 29/29 / v31.10 32/32
+TOTAL 252/252

@@ -1,0 +1,36 @@
+JoyMetric v31.22.0 - FutureSynth (+ v31.21 SynthWeave, v31.20 DrumFront) Validation
+====================================================================================
+
+STATIC
+PASS  py_compile: agentic_live_dj.py / realtime_native_engine.py / synth_weave.py / drum_brain.py / drum_kit.py / beat_clock.py
+PASS  node --check static/app.js
+
+v31.22 FUTURESYNTH SUITE (24/24 PASS)
+PASS  deck: clip starts at its scheduled frame, 20 ms fades, gain applied
+PASS  deck: a late clip joins in progress (still aligned), finished clips released
+PASS  mixer: clip audible from its scheduled render frame within 2 samples; status synth_clips/played/active
+PASS  agent: future-bar composition request (2 bars at 120 BPM), cut exactly at an upcoming downbeat (impulse at sample 0)
+PASS  agent: scheduled at a downbeat render frame 10.5 s ahead; status "scheduled"
+PASS  agent: no second request within 8 bars; next composition 8 bars later with the next kind (1 bar first, 2 bars once the GPU is known to be fast)
+PASS  agent: a late clip is re-aligned to a later even bar boundary instead of being dropped
+PASS  agent: an off-key composition is rejected (in-key gate)
+PASS  play-time gate: a fitting clip stays; a clip that no longer fits the bars about to play is cancelled
+PASS  deck: cancel removes the clip / late cap: > 2 bars late is dropped
+PASS  v31.22.3 prompt: names the song's key, tempo, genre, energy, vocal, CLAP state; asks for a part that fits this exact song
+PASS  v31.22.3 prompt: the DJ instruction sheet never reaches the caption; piano/keys/drums/vocals are negatives
+PASS  v31.22.3 prompt: empty style/key still valid; <= 80 words (T5 128-token window)
+PASS  REAL Stable Audio worker (RTX 5070): 2-bar lead composed in ~1.5 s, in key (inkey >= 0.6)
+
+v31.21 SYNTHWEAVE SUITE (17/17 PASS)
+PASS  prompt / post-process / fake-worker pipeline / engine loop blend / agent wiring / real worker
+PASS  worker fed 44.1 kHz (native), result back at 48 kHz aligned (the fix for unrelated-sounding synths)
+PASS  harmonic metric: off-key part < 0.35 in-key, in-key part > 0.85; sieve attenuates off-key energy >= 10 dB
+
+v31.20 DRUMFRONT SUITE (10/10 PASS)
+PASS  de-drum -12.2 dB transients, kick -18.7 dB, hats -13.4 dB, pad -0.7 dB, 0.34 ms
+PASS  presence: drummer hats x4.22 / kick x4.31 at creativity max, no clipping; agent posts presence + de-drum
+
+REGRESSION
+PASS  DrumMind 25/25 / GrooveTruth 21/21 / BeatClock 14/14 / GridTruth 18/18
+PASS  v31.16 24/24 / v31.15 11/11 / v31.14 21/21 / v31.13 12/12 / v31.12 21/21 / v31.11 29/29 / v31.10 32/32
+TOTAL 279/279

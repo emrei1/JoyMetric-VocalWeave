@@ -1,0 +1,53 @@
+JoyMetric v30.4.45 — Fast Control Response — TEST REPORT
+Date: 2026-08-28
+Base: v30.4.44 Auto Spotify Route + Continuous Audio
+
+INTENT
+- Make audible feature/control changes substantially faster.
+- Preserve the now-working Spotify -> JoyMetric Virtual Input auto-route.
+- Preserve exact physical Audio Out routing and continuous playback fix.
+- Preserve final 15D mapping, FEATURE_RENDER_BOOST 19.50, Clean6x/MusicCLAP DSP targets and -2.0 dBTP limiter.
+
+CHANGES
+1. Browser realtime control POST debounce: 42 ms -> 18 ms.
+2. New JOY_CONTROL_RESPONSE_SPEED default = 2.35x (1.0 reproduces v30.4.44 native response speed).
+3. Two-stage native parameter automation keeps jerk-limited/C2 continuity, but uses shorter control/track tau and moderately higher velocity/acceleration/jerk limits.
+4. Effect-intensity macro ramp accelerated by the same response-speed factor.
+5. Continuous DJ deck:
+   - normal slew 0.48 -> 0.82 / sec
+   - normal smooth 1.10 -> 0.58 sec
+   - reluctant Dreamy/Space slew 0.30 -> 0.52 / sec
+   - reluctant smooth 1.75 -> 0.92 sec
+   - target step 0.075 -> 0.105
+6. Chorus/reverb/delay wet crossfades accelerated. Delay-time anti-click slew remains conservative and unchanged.
+7. 2.0 s semantic preview/lookahead is unchanged; this release targets control responsiveness, not routing/preview latency.
+
+STATIC / SYNTAX TESTS
+PASS: python -m py_compile app.py realtime_native_engine.py realtime_semantic_server.py
+PASS: node --check static/app.js
+
+ROUTING / DRIVER REGRESSION
+PASS: driver/patch_joymetric_driver.py byte-identical to v30.4.44
+PASS: SETUP_AND_START.ps1 byte-identical to v30.4.44
+PASS: AST parity for _PerAppRenderRouter
+PASS: AST parity for _ManagedVirtualChannelInputStream
+PASS: AST parity for _find_managed_virtual_channel
+PASS: AST parity for NativeRealtimeEngine._open_pair
+=> Spotify auto-route, virtual endpoint capture, exact Audio Out and no-subprocess-in-audio-thread fix are unchanged.
+
+MEASURED PARAMETER STEP RESPONSE (48 kHz, 512-frame blocks; time to 90% target)
+                     v30.4.44      v30.4.45
+Air EQ               1.909 s       0.800 s
+Reverb amount        2.848 s       1.184 s
+Stereo width         2.848 s       1.195 s
+Approx response improvement: 2.38x–2.41x.
+
+AGGRESSIVE AUDIO STABILITY TEST
+- 480 consecutive 512-frame stereo blocks.
+- Large feature direction reversals every 30 blocks.
+- Strong simultaneous EQ / ambience / width / energy changes.
+PASS: all samples finite (no NaN/Inf)
+PASS: maximum sample peak = 0.73636 (< 0.83 safety criterion)
+
+RESULT
+PASS. v30.4.45 makes feature/control changes about 2.4x faster while preserving the working v30.4.44 routing/driver path and the existing final DSP targets.

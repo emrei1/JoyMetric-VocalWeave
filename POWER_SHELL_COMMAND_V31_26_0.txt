@@ -1,0 +1,4 @@
+# JoyMetric v31.26.0 LineMind - launch
+Set-Location "C:\Users\inceo\music_rec\JoyMetric_Workstation_UI_v31_26_0_LineMind"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_SONGMIND.ps1
+# JOY_GEN_AI=0 disables the generative composer (rack fallback); JOY_GENRE_PROBE=0 the genre probe; JOY_GROOVENET=0 the neural placement

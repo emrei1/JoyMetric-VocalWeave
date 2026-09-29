@@ -1,0 +1,11 @@
+# JoyMetric v31.30.17 VocalWeave - launch
+Set-Location "C:\Users\inceo\music_rec\JoyMetric_Workstation_UI_v31_30_17_VocalWeave"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_SONGMIND.ps1
+# JOY_SONGMIND=<path> overrides the model; JOY_GEN_AI=0 disables the generative composer; JOY_GEN_FALLBACK=1 re-enables rack fallback
+
+# low-latency profile (10 s lag, 4 s windows; AC power only):
+# powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_LOWLAT.ps1
+# ultra-low latency (4 s lag, 2 s windows; AC power, FX near 1.0):
+# powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_ULTRALOW.ps1
+# mid latency (20 s lag, 8 s windows = the normal profile's seams):
+# powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_MID.ps1

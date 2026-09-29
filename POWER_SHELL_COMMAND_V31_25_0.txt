@@ -1,0 +1,4 @@
+# JoyMetric v31.25.0 GenMind - launch
+Set-Location "C:\Users\inceo\music_rec\JoyMetric_Workstation_UI_v31_25_0_GenMind"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\LAUNCH_SONGMIND.ps1
+# JOY_GEN_AI=0 disables the generative composer (rack fallback), JOY_GROOVENET=0 the neural placement, JOY_SYNTH_TIMBRE=0 the CLAP instrument choice

@@ -1,0 +1,64 @@
+JoyMetric v31.9.1 — Musical Co-Mix + Wow Scene Composer Validation
+=================================================================
+
+STATIC
+PASS  python -W error::SyntaxWarning -m py_compile:
+      app.py
+      agentic_live_dj.py
+      dj_director_v3.py
+      realtime_native_engine.py
+      realtime_semantic_server.py
+      device_scan_worker.py
+PASS  node --check static/app.js
+
+NEUTRAL REGRESSION
+PASS  Deck-B-off output vs v31.8.9: sample-level max difference = 0.0
+
+MUSICAL CO-MIX / ROLE RESOLUTION
+Synthetic case: Deck A = bass + centered tonal/vocal-like body; Deck B = harmonically mismatched tone + strong upper rhythmic information.
+PASS  resolved role = PERCUSSIVE
+PASS  B low keep ~= 0.015
+PASS  B body keep ~= 0.173
+PASS  B air keep ~= 0.784
+PASS  center keep ~= 0.658 under high future-vocal density
+
+Matched tonal case:
+PASS  resolved role = HARMONIC
+PASS  body allowed more strongly than mismatch case (body keep ~= 0.442)
+PASS  center remains mostly intact when future vocal is sparse (center keep ~= 0.917)
+
+SUB-BEAT LOOP ALIGNMENT
+Synthetic future-compatible capture:
+PASS  selected phrase remained beat/phrase identical
+PASS  micro alignment selected = -15.0 ms
+PASS  harmonic match ~= 0.901
+PASS  rhythm match ~= 0.728
+PASS  fixed quality gate = 1.0
+
+DJ DIRECTOR V4 / WOW SCENES
+Max authority (3.6x), high-novelty rising boundary:
+PASS  selected archetype = wow_motif_reveal
+Representative selected family sequence:
+      DECKB_COUNTER_GROOVE
+      DECKB_ECHO_FREEZE
+      DECKB_PICKUP_STUTTER
+      DROP
+      PUNCH_IN
+      qualified short A/B pulse / return pairs
+
+Normal authority (1.0x), same boundary:
+PASS  selected archetype = deckb_slice_remix_drop
+PASS  wow-scene preference is therefore authority/novelty dependent, not always-on
+
+REALTIME SYNTHETIC STRESS
+48 kHz stereo / 2048 frames, future-matched loop + slicer + B FX + A/B shift:
+mean   ~= 1.75 ms
+p95    ~= 2.27 ms
+p99    ~= 2.33 ms
+max    ~= 26.89 ms
+budget  = 42.67 ms
+peak   ~= 0.3423
+PASS  finite output / no NaN / no Inf
+
+VALIDATION BOUNDARY
+The Linux artifact environment cannot execute the user's real Windows Spotify -> JoyMetric Virtual Input -> physical WASAPI/headphone route. The final subjective musical-quality and hardware-xrun validation must be performed on the target Windows machine.

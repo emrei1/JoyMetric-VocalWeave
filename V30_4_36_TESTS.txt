@@ -1,0 +1,12 @@
+JoyMetric v30.4.36 Driver Bootstrap — static/package checks
+
+PASS: package ZIP integrity (unzip -t)
+PASS: v30.4.35 application/DSP files retained unchanged
+PASS: SETUP_AND_START now captures elevated installer exit code and prints log tail on failure
+PASS: installer writes transcript to %LOCALAPPDATA%\JoyMetric\logs\driver-install-v30.4.36.log
+PASS: Secure Boot / TESTSIGNING gate happens before large toolchain installation
+PASS: missing MSBuild/SDK/WDK can invoke Microsoft's official WinGet WDK configuration
+PASS: installer no longer assumes WDK-shipped DevCon; it checks out and builds Microsoft's DevCon sample locally
+PASS: TESTSIGNING reboot exit code 3010 is preserved
+
+NOT EXECUTED HERE: Windows WDK compile, certificate signing, kernel driver load, PnP enumeration, Spotify render/capture hardware test. These require Windows.

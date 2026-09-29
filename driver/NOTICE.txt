@@ -1,0 +1,10 @@
+JoyMetric Virtual Audio Driver development framework
+
+The Windows WDM/WaveRT skeleton is derived at build time from Microsoft's
+Windows-driver-samples / audio/simpleaudiosample repository (MS-PL). The
+upstream source is downloaded from Microsoft during the development build and
+patched locally by JoyMetric tooling. The JoyMetric patch implements the custom
+render-to-capture PCM ring transport, endpoint identity, and 32-bit stereo wire
+format used by JoyMetric.
+
+Upstream: https://github.com/microsoft/Windows-driver-samples

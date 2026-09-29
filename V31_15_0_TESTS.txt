@@ -1,0 +1,43 @@
+﻿JoyMetric v31.15.0 â€” RustCore Validation
+========================================
+
+STATIC
+PASS  py_compile: app.py Â· agentic_live_dj.py Â· dj_director_v3.py
+      realtime_native_engine.py Â· musical_intelligence.py Â· rust_dsp.py
+PASS  node --check static/app.js
+PASS  cargo build --release (native/joymetric_rt, MSVC, LTO)
+
+RUSTCORE SUITE (11/11 PASS)
+
+PARITY (Rust vs the numpy reference)
+PASS  DLL loads + passes load-time self-test
+PASS  deck channel strip sample parity        max diff 1.86e-09
+PASS  smoothed telemetry state parity         diff 0.00e+00
+PASS  bass-cut path sample parity             max diff 1.49e-08
+PASS  groove low-band envelope correlation    1.0000
+PASS  groove level ratio                      1.000 (within 12% gate)
+PASS  groove finite
+
+SAFETY
+PASS  everything-on full chain finite and bounded (peak 0.322)
+
+BENCHMARK (everything-on stress blocks, 2048 frames)
+      python: med 5.125 ms Â· p99 8.259 ms Â· max 8.842 ms
+      rust  : med 2.382 ms Â· p99 4.074 ms Â· max 4.656 ms
+PASS  RustCore faster at the median (2.15x)
+PASS  RustCore tightens the p99 tail (8.26 -> 4.07 ms)
+PASS  rust median comfortably inside a HALVED block budget
+      => field xruns at 1024 frames; launcher retains 2048 (tail headroom doubled)
+
+REGRESSION â€” all prior suites re-run WITH the Rust path active
+PASS  TimeWeaver 21/21 Â· GridLock 12/12 Â· FullRemix 21/21
+      StageCraft 29/29 Â· v31.10 32/32
+TOTAL 126/126
+
+FALLBACK
+JOY_RUST_DSP=0, a missing DLL, or a failed self-test all keep the pure-numpy
+path, byte-for-byte identical to v31.14 behavior.
+
+VALIDATION BOUNDARY
+CONFIRMED in the field: 1024-frame blocks crackle on this route; 2048 is the
+validated default (JOY_AGENTIC_AUDIO_FRAMES=1024 stays opt-in for experiments).

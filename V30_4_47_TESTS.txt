@@ -1,0 +1,55 @@
+JOYMETRIC v30.4.47 LOWENDINTEGRITY TEST REPORT
+================================================
+
+STATIC
+- realtime_native_engine.py: py_compile PASS
+- static/app.js: node --check PASS
+
+ROUTING / DRIVER REGRESSION
+Byte-identical vs v30.4.46:
+- app.py PASS
+- static/app.js PASS
+- SETUP_AND_START.ps1 PASS
+- INSTALL_JOYMETRIC_DRIVER.ps1 PASS
+- driver/patch_joymetric_driver.py PASS
+- realtime_semantic_server.py PASS
+Therefore Spotify auto-route, JoyMetric virtual driver and UI routing are unchanged.
+
+CONTROL / FEATURE REGRESSION
+- CONTROL_RESPONSE_SPEED = 2.35 (unchanged)
+- FEATURE_RENDER_BOOST = 19.50 (unchanged)
+- DJ_FEATURE_SMOOTH_SEC = 0.58 (unchanged)
+
+HIP-HOP / KICK + 808 REALTIME STRESS (48 kHz, 1024 frames)
+Synthetic signal: 55/110 Hz bass + decaying kick + 8th-note hats,
+aggressive bass EQ, transient attack, compression, width and saturation.
+Observed v30.4.47 DSP times:
+- p50 ~7.85 ms
+- p90 ~9.64 ms
+- p95 ~10.65 ms
+- p99 ~12.08 ms
+- max ~13.46 ms
+- 1024-frame realtime budget = 21.33 ms
+Result: PASS with large deadline margin in this test environment.
+
+LOW-END INTERMODULATION TEST
+Two-tone low-frequency nonlinear test (55 Hz + 72 Hz):
+- v30.4.46 strongest measured IM/fundamental ~ -22.33 dB
+- v30.4.47 strongest measured IM/fundamental ~ -25.11 dB
+Improvement: ~2.78 dB lower measured low-end IM in this test.
+
+TRUE-PEAK / LIMITER
+- Progressive lookahead attack used instead of instantaneous one-sample attack.
+- Realtime detector: quarter-sample cubic (4x-style).
+- Limiter internal ceiling: -2.04 dBTP.
+- Independent old dense eighth-sample verification on aggressive test output: ~ -2.03 dBTP.
+Result: PASS.
+
+SIGNAL SAFETY
+- NaN/Inf: none observed
+- final sample peak under safety ceiling
+- isolated de-click guard retained
+
+NOTE
+Windows WASAPI hardware scheduling cannot be executed in this Linux artifact environment.
+The 1024-frame Spotify managed-route change is specifically intended to reduce real Windows deadline misses/xruns while adding only ~10.7 ms relative to the old 512-frame route.

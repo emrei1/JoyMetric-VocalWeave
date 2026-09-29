@@ -1,0 +1,26 @@
+{
+  "conda_exe": "C:\\Users\\inceo\\miniconda3\\Scripts\\conda.exe",
+  "roformer_env": "roformer_sep",
+  "sa3_cpu_env": "stableaudio3_tflite",
+  "sa3_gpu_env": "stableaudio3_gpu",
+  "stable_audio_repo": "C:\\Users\\inceo\\music_rec\\stable-audio-3",
+  "host": "127.0.0.1",
+  "port": 8765,
+  "gpu_direct_max_seconds": 300,
+  "gpu_chunk_seconds": 150,
+  "gpu_chunk_overlap_seconds": 6,
+  "gpu_fallback_chunk_seconds": [
+    150,
+    120,
+    90,
+    60
+  ],
+  "gpu_prefer_unchunked_decode": true,
+  "stem_cache_entries": 6,
+  "gpu_worker_host": "127.0.0.1",
+  "gpu_worker_port": 8766,
+  "gpu_worker_startup_timeout_seconds": 180,
+  "gpu_worker_offload_for_roformer": true,
+  "realtime_model_host": "127.0.0.1",
+  "realtime_model_port": 8767
+}

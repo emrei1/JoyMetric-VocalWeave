@@ -1,0 +1,38 @@
+JoyMetric v31.8.7 — Smooth Deck-B Loop Selection validation
+
+STATIC
+PASS  python -m py_compile realtime_native_engine.py agentic_live_dj.py dj_director_v3.py
+PASS  node --check static/app.js
+
+A/B DOMINANCE
+PASS  Director V3 Deck-B layer ranges reduced; generated high-energy slicer plan max layer = 0.2273 in deterministic test.
+PASS  Director high-authority plan contained one primary gesture per beat; no duplicate-beat gesture collision.
+PASS  Agent Deck-B full-swap cap reduced and ordinary Deck-B gestures prefer layer mode.
+PASS  Roll-family crossfader authority reduced while B-only FX authority is retained.
+
+MUSICAL LOOP SELECTION
+Synthetic 48 kHz, 120 BPM source with deliberately damaged newest phrase:
+- naive newest-tail seam error: 2.6034801
+- selected loop seam error:    0.9743659
+- selected whole-beat offset:  1.0 beat
+- loop selection score:        0.483068
+PASS  selector rejected the damaged newest phrase for a cleaner beat-aligned candidate.
+PASS  candidate search uses only whole-beat offsets, preserving beat-grid phase.
+PASS  older phrase requires a material score advantage before replacing newest phrase.
+PASS  6 ms equal-power loop seam guard present.
+
+REALTIME STRESS
+48 kHz stereo, 2048 frames, Deck-B layer + ACCEL slicer + 95% B Remix FX + source-aware performance FX:
+- peak: 0.2320954
+- p99 mixer processing: 5.2527 ms
+- realtime budget: 42.67 ms
+- finite PCM / no NaN / no Inf: PASS
+- steady crossfader in stress case: 0.10
+- steady Deck-B layer in stress case: 0.28
+
+REGRESSION
+PASS  Deck-B-off / slicer-off output is sample-identical to v31.8.6 in deterministic 30-block test.
+      max absolute difference = 0.0
+
+BOUNDARY
+Windows WASAPI, Spotify per-app routing and the user's physical headphone endpoint cannot be executed in this Linux artifact environment.

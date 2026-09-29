@@ -1,0 +1,50 @@
+JoyMetric v30.4.42 TESTS
+========================
+
+ROOT CAUSE
+- v30.4.41 aborted before build because patch_joymetric_driver.py required an exact textual macro line:
+  #define SPEAKER_HOST_MIN_BITS_PER_SAMPLE 16
+- The user's cached Microsoft source did not match that exact textual shape.
+- That check was unnecessary because v30.4.41+ no longer modifies speakerwavtable.h.
+
+FIXES
+1. Removed brittle exact-line speaker macro assertions.
+2. Speaker source is not modified at all.
+3. Added tolerant structural check for:
+   - SpeakerHostPinSupportedDeviceFormats
+   - KSPIN_DATAFLOW_IN
+   - KSPIN_COMMUNICATION_SINK
+   - 48 kHz / stereo / PCM16 WAVE_FORMAT_EXTENSIBLE format
+4. ForceRebuild now deletes the cached windows-driver-samples checkout and re-clones pristine Microsoft main source before patching.
+5. DriverVer bumped from 0.2.0.0 to 0.3.0.0 so Windows cannot keep the old development package as equal/newer.
+6. New install marker: installed-v30442.marker.
+7. Runtime capture architecture remains v30.4.41: JoyMetric render endpoint WASAPI loopback; paired microphone is not used.
+
+TESTS RUN
+- Python py_compile: PASS
+  app.py
+  realtime_native_engine.py
+  realtime_semantic_server.py
+  driver/patch_joymetric_driver.py
+- static/app.js node --check: PASS
+- UTF-16 BOM synthetic upstream INF patch: PASS
+  - BOM preserved (FF FE)
+  - ROOT\\JoyMetricVirtualAudio present
+  - DriverVer 0.3.0.0 present
+  - KSCATEGORY_RENDER preserved
+  - JoyMetric Virtual Input present
+- Tolerant speaker-format fixture with changed whitespace/comments: PASS
+- Installer pristine-source reset assertions: PASS
+- Installer v30.4.42 markers/log assertions: PASS
+- DSP AST parity vs v30.4.41: PASS
+  feature_params
+  studio_dsp_render_params
+  RealtimeDSP
+  TransparentAutoGainStage
+
+WINDOWS-ONLY VALIDATION STILL REQUIRED
+- WDK build/install of v0.3 driver
+- Windows MMDevice render enumeration ({0.0.0...})
+- Spotify automatic route to JoyMetric render endpoint
+- WASAPI loopback PCM arrival
+- processed playback to selected physical output

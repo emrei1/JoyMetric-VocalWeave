@@ -1,0 +1,16 @@
+# Runtime state: jobs, stem cache, the user's Home library (several GB), pid/lock files
+runtime/
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs written next to the app
+*.log
+
+# Rust build output (the built DLL is kept as native/joymetric_rt.dll)
+native/target/
+
+# Local pid / lock markers
+*.pid
+*.lock

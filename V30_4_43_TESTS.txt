@@ -1,0 +1,15 @@
+JoyMetric v30.4.43 launcher wait fix
+
+Scope:
+- SETUP_AND_START.ps1 only.
+- No kernel-driver source changes.
+- No realtime_native_engine.py changes.
+- No DSP/feature mapping changes.
+- Accepts the installed-v30442.marker intentionally.
+
+Checks:
+PASS: launcher contains no `Start-Process ... -Wait` invocation.
+PASS: launcher polls a present/OK JoyMetric render MMDevice endpoint (InstanceId {0.0.0...}).
+PASS: launcher accepts existing v30.4.42 success marker and therefore does not reinstall a driver that is already working.
+PASS: timeout/error path still prints the driver installer log.
+PASS: reboot exit code 3010 is handled.

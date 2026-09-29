@@ -1,0 +1,44 @@
+JOYMETRIC v30.4.46 CRACKLEGUARD TEST REPORT
+
+Base: v30.4.45 Fast Control Response
+
+CHANGES
+- RBJ biquad target coefficients are morphed in 128-frame sub-blocks.
+- MasterSafetyCompressor v2: soft-knee peak glue, modest ratio, fast attack, slow release, max 2.8 dB requested reduction.
+- True-peak limiter remains -2.0 dBTP; lookahead 3.5 -> 5.0 ms, release 190 -> 220 ms.
+- Conservative SingleSampleDeClicker enabled by default; JOY_SAMPLE_DECLICK=0 disables it.
+- CONTROL_RESPONSE_SPEED remains 2.35.
+
+STATIC / REGRESSION
+PASS: python -m py_compile app.py realtime_native_engine.py realtime_semantic_server.py
+PASS: node --check static/app.js
+PASS: app.py byte parity vs v30.4.45
+PASS: static/app.js byte parity vs v30.4.45
+PASS: SETUP_AND_START.ps1 byte parity vs v30.4.45
+PASS: INSTALL_JOYMETRIC_DRIVER.ps1 byte parity vs v30.4.45
+PASS: driver/patch_joymetric_driver.py byte parity vs v30.4.45
+PASS: feature_params AST parity vs v30.4.45
+PASS: NativeStudioCore AST parity vs v30.4.45
+PASS: _ManagedVirtualChannelInputStream AST parity vs v30.4.45
+
+DYNAMIC AUTOMATION STRESS (48 kHz / stereo / 512 frames)
+Synthetic music-like source; strong alternating EQ/saturation/width/reverb/compression/transient targets.
+v30.4.45 boundary derivative p99: ~0.0934
+v30.4.46 boundary derivative p99: ~0.0880
+v30.4.45 boundary/local derivative ratio p99: ~2.66
+v30.4.46 boundary/local derivative ratio p99: ~2.45
+v30.4.46 mean DSP block time observed: ~7.1 ms
+48 kHz / 512-frame block budget: 10.67 ms
+No NaN/Inf. No extreme synthetic boundary ratio >8.
+
+PEAK / DYNAMICS STRESS
+Near-mastered source + strong Air/Presence/Bass/drive/transient/compression/reverb.
+Both versions final peak: ~0.794328 (-2.0 dBFS sample ceiling region).
+v30.4.45 worst observed limiter GR: ~-3.56 dB
+v30.4.46 worst observed limiter GR: ~-3.17 dB
+v30.4.45 master compressor GR: ~-0.11 dB
+v30.4.46 master compressor GR: ~-1.05 dB
+Interpretation: v46 removes more DSP-created transient energy before the limiter, so the final limiter works less aggressively.
+
+LIMITATION
+Synthetic tests cannot reproduce every Windows DAC/driver/song combination. Final validation is live Spotify playback on the user's Windows system. If any isolated crackle remains, status fields xruns / limiter_reduction_db / master_comp_reduction_db / declick_repairs can distinguish scheduler underruns from DSP-created artifacts.
